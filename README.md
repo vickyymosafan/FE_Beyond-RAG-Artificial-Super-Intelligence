@@ -1,198 +1,87 @@
-# Smartchat AI Assistant
+# 💬 Smart Agentic AI Chat - Frontend Application
 
-Asisten AI berbasis chat untuk Universitas Muhammadiyah Jember yang dibangun dengan Next.js, Supabase, dan n8n.
+Aplikasi web modern berbasis **Next.js 16 (App Router)**, **React 19**, **TailwindCSS**, dan **Shadcn UI** yang berfungsi sebagai antarmuka antaraksi cerdas untuk sistem **Agentic RAG AI**.
 
-## 🚀 Fitur
+---
 
-- 💬 Percakapan AI yang natural dengan RAG (Retrieval-Augmented Generation)
-- 📝 Dukungan markdown lengkap untuk respons
-- 💾 Riwayat percakapan tersimpan di database
-- 🎵 Musik latar dengan lirik
-- 🌙 Mode gelap dan terang dengan skema warna kustom
-- 🎤 Input suara dengan speech recognition
-- 📲 PWA dengan install prompt cross-platform
-- 🚀 Onboarding wizard untuk pengguna baru
-- 📱 Responsive design untuk semua device
+## ✨ Fitur Utama
 
-## 🛠️ Tech Stack
+- **Antarmuka Chat Interaktif & Responsif**:
+  - Tampilan *dark mode* modern dengan efek *glassmorphic* & animasi halus.
+  - Virtualisasi daftar pesan menggunakan `@tanstack/react-virtual` untuk performa cepat 60fps meskipun berisi ribuan pesan.
+  - Rendering Markdown lengkap dengan *syntax highlighting* & matematika LaTeX (`katex`).
+  - Popover rujukan sumber (*Citations*) interaktif lengkap dengan halaman dokumen pedoman.
+- **Admin Dashboard Tersembunyi (*Route Obscuration*)**:
+  - Halaman Admin terisolasi pada rute khusus `/vickymosafan` & `/vickymosafan/dashboard` (rute standar `/admin` mengembalikan tampilan *404 Not Found* sebagai perlindungan dari bot/hacker).
+  - Ringkasan statistik dokumen & manajemen unggah/hapus file PDF/DOCX.
+- **Keamanan Tingkat Tinggi**:
+  - Penerapan **HTTP Security Headers** (`X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`).
+  - Penyaringan pesan input (*Input Sanitizer*) untuk mencegah serangan XSS & Script Injection.
+- **Defensive Storage & PWA Support**:
+  - Penyimpanan riwayat percakapan lokal di `localStorage` dengan penanganan *try-catch* defensif.
+  - Dukungan **Progressive Web App (PWA)** lengkap dengan manifes web & prompt instalasi iOS/Android.
 
-- **Framework**: Next.js 16
-- **Database**: Supabase (PostgreSQL)
-- **AI Backend**: n8n Webhook dengan RAG
-- **Styling**: Tailwind CSS 4
-- **UI Components**: Radix UI + shadcn/ui
-- **Deployment**: Vercel
+---
 
-## 📋 Prasyarat
+## 🎨 Struktur Proyek
 
-- Node.js 18+
-- npm atau pnpm
-- Akun Supabase
-- n8n Workflow dengan RAG
-
-## ⚙️ Instalasi
-
-1. **Clone repository**
-
-   ```bash
-   git clone https://github.com/vickyymosafan/ai-smartchat.git
-   cd ai-smartchat
-   ```
-
-2. **Install dependencies**
-
-   ```bash
-   npm install
-   # atau
-   pnpm install
-   ```
-
-3. **Setup environment variables**
-
-   Salin `.env.example` ke `.env.local` dan isi dengan kredensial Anda:
-
-   ```bash
-   cp .env.example .env.local
-   ```
-
-   Isi file `.env.local`:
-
-   ```env
-   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-   SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
-   N8N_WEBHOOK_URL=your_n8n_webhook_url
-   ```
-
-4. **Jalankan development server**
-
-   ```bash
-   npm run dev
-   ```
-
-5. **Buka browser**
-
-   Akses [http://localhost:3000](http://localhost:3000)
-
-## 🚀 Deployment ke Vercel
-
-1. **Push ke GitHub**
-
-   ```bash
-   git add .
-   git commit -m "Initial commit"
-   git push origin main
-   ```
-
-2. **Connect ke Vercel**
-
-   - Login ke [vercel.com](https://vercel.com)
-   - Klik "Add New Project"
-   - Import repository dari GitHub
-
-3. **Set Environment Variables**
-
-   Di Vercel Dashboard → Settings → Environment Variables:
-
-   - `NEXT_PUBLIC_SUPABASE_URL`
-   - `SUPABASE_SERVICE_ROLE_KEY`
-   - `N8N_WEBHOOK_URL`
-
-4. **Deploy**
-
-   Vercel akan otomatis build dan deploy
-
-## 📱 Build untuk Android (Capacitor)
-
-Untuk membuat aplikasi Android:
-
-1. **Tambah static export di `next.config.mjs`**
-
-   ```js
-   const nextConfig = {
-     output: "export",
-     // ... config lainnya
-   };
-   ```
-
-2. **Install Capacitor**
-
-   ```bash
-   npm install @capacitor/core @capacitor/cli @capacitor/android
-   npx cap init "Smartchat AI" "com.umj.smartchat" --web-dir=out
-   npx cap add android
-   ```
-
-3. **Build dan Sync**
-
-   ```bash
-   npm run build
-   npx cap sync android
-   npx cap open android
-   ```
-
-4. **Build APK di Android Studio**
-
-## 📁 Struktur Folder
-
-```
+```text
+frontend1/
 ├── app/
-│   ├── api/
-│   │   ├── chat/          # Chat dengan AI
-│   │   ├── chats/         # CRUD chat histories
-│   │   ├── messages/      # Get messages
-│   │   ├── music/         # Music data
-│   │   └── sessions/      # Session management
-│   ├── globals.css        # Global styles & theme
-│   ├── layout.tsx         # Root layout
-│   └── page.tsx           # Home page
+│   ├── page.tsx               # Halaman Beranda Chat Utama
+│   ├── vickymosafan/          # Halaman Login Admin & Dashboard
+│   │   ├── page.tsx           # Form Login Admin
+│   │   └── dashboard/page.tsx # Panel Manajemen Dokumen & Statistik
+│   ├── admin/page.tsx         # Decoy 404 Route
+│   ├── error.tsx              # Root Error Boundary
+│   ├── not-found.tsx          # Halaman 404 Custom
+│   └── globals.css            # Desain Sistem & Tema CSS
 ├── components/
-│   ├── chat/              # Chat components
-│   ├── layout/            # Layout components
-│   ├── music/             # Music player
-│   ├── onboarding/        # User onboarding wizard
-│   ├── providers/         # Context providers
-│   ├── pwa/               # PWA install components
-│   └── ui/                # UI components (shadcn)
-├── hooks/                 # Custom React hooks
+│   ├── chat/                  # Komponen Chat (Container, MessageList, MessageItem, Input)
+│   ├── admin/                 # Komponen Panel Admin (Dashboard Layout, DocumentTable, UploadDialog)
+│   ├── layout/                # Sidebar, Header, & Navigation
+│   └── ui/                    # Komponen Basis Shadcn UI
+├── hooks/                     # Custom React Hooks (useMessages, useChatHistory, useOnboarding, etc.)
 ├── lib/
-│   ├── pwa/               # PWA configuration
-│   ├── storage/           # LocalStorage utilities
-│   ├── supabase.ts        # Supabase client
-│   └── utils.ts           # Utility functions
-├── public/
-│   └── sw.js              # Service Worker
-└── types/
-    └── index.ts           # TypeScript types
+│   ├── api/                   # Service API (chat-service.ts, admin-service.ts)
+│   ├── constants.ts           # Sentralisasi Kunci Storage & Rute API
+│   ├── error-handler.ts       # Centralized Error Logger
+│   └── utils.ts               # Utility Helper & Input Sanitizer
+├── types/                     # Definisi Tipe Data TypeScript Strict
+├── next.config.mjs            # Konfigurasi Next.js, Security Headers, & API Rewrites
+└── README.md
 ```
 
-## 🎨 Kustomisasi Theme
+---
 
-Theme dapat dikustomisasi di `app/globals.css`. Project menggunakan:
+## 🚀 Panduan Memulai
 
-- **Light mode**: Courier New font, cyan/teal color scheme
-- **Dark mode**: Source Code Pro font, cyan/teal color scheme
-
-## 📝 Scripts
-
+### 1. Instalasi Dependensi
 ```bash
-npm run dev      # Development server
-npm run build    # Production build
-npm run start    # Start production server
-npm run lint     # Run ESLint
-npm run analyze  # Analyze bundle size
+npm install
 ```
 
-## 🔒 Keamanan
+### 2. Jalankan Mode Pengembang (Development)
+```bash
+npm run dev
+```
+Buka [http://localhost:3000](http://localhost:3000) pada browser Anda.
 
-- Semua kredensial disimpan di environment variables
-- Service role key tidak pernah di-expose ke client
-- CORS headers dikonfigurasi untuk API routes
-- Input validation di semua API endpoints
+### 3. Build untuk Produksi
+```bash
+npm run build
+npm run start
+```
+
+---
+
+## 🔐 Navigasi Rute Rahasia Admin
+
+- **Halaman Utama Chat**: `http://localhost:3000/`
+- **Login Admin**: `http://localhost:3000/vickymosafan`
+- **Dashboard Admin**: `http://localhost:3000/vickymosafan/dashboard`
+
+---
 
 ## 📄 Lisensi
-
-MIT License
-
-## 👨‍💻 Kontributor
-
-Dikembangkan untuk Universitas Muhammadiyah Jember
+© 2026 - Portfolio Project RAG AI Agentic. All Rights Reserved.
