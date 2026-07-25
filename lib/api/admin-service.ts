@@ -1,69 +1,88 @@
-export interface AdminDocument {
-  id: string; title: string; filename: string; type: string;
-  total_pages: number; total_images: number; total_tables: number;
-  status: string; version: number;
-  created_at: string; updated_at: string;
-}
+import type { AdminDocument } from "@/types"
+import { STORAGE_KEYS, API_ROUTES } from "@/lib/constants"
+import { logError } from "@/lib/error-handler"
+
+export type { AdminDocument }
 
 function getToken(): string | null {
-  if (typeof window === 'undefined') return null;
-  return localStorage.getItem('admin_token');
+  if (typeof window === "undefined") return null
+  try {
+    return localStorage.getItem(STORAGE_KEYS.ADMIN_TOKEN)
+  } catch (error) {
+    logError("getToken", error)
+    return null
+  }
 }
 
-async function api(path: string, options?: RequestInit) {
-  const token = getToken();
+async function api<T = unknown>(path: string, options?: RequestInit): Promise<T> {
+  const token = getToken()
   const res = await fetch(path, {
     ...options,
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...options?.headers,
     },
-  });
+  })
   if (res.status === 401) {
-    localStorage.removeItem('admin_token');
-    if (typeof window !== 'undefined') window.location.href = '/admin';
-    throw new Error('Unauthorized');
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.removeItem(STORAGE_KEYS.ADMIN_TOKEN)
+      } catch (error) {
+        logError("removeToken", error)
+      }
+      window.location.href = "/admin"
+    }
+    throw new Error("Unauthorized")
   }
-  return res.json();
+  if (!res.ok) {
+    const errorText = await res.text().catch(() => "HTTP Error")
+    throw new Error(errorText || `Request failed with status ${res.status}`)
+  }
+  return res.json() as Promise<T>
 }
 
 export const adminService = {
-  async login(username: string, password: string) {
-    const res = await fetch('/api/admin/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+  async login(username: string, password: string): Promise<{ token: string; expiresAt: number }> {
+    const res = await fetch(API_ROUTES.ADMIN_LOGIN, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
-    });
-    if (!res.ok) throw new Error('Invalid credentials');
-    return res.json() as Promise<{ token: string; expiresAt: number }>;
+    })
+    if (!res.ok) throw new Error("Kredensial tidak valid")
+    return res.json() as Promise<{ token: string; expiresAt: number }>
   },
 
-  async getDocuments() {
-    const data = await api('/api/admin/documents') as { documents: AdminDocument[] };
-    return data.documents || [];
+  async getDocuments(): Promise<AdminDocument[]> {
+    const data = await api<{ documents: AdminDocument[] }>(API_ROUTES.ADMIN_DOCUMENTS)
+    return data.documents || []
   },
 
-  async getDocument(id: string) {
-    return api(`/api/admin/documents/${id}`);
+  async getDocument(id: string): Promise<{ document: AdminDocument }> {
+    return api<{ document: AdminDocument }>(`${API_ROUTES.ADMIN_DOCUMENTS}/${id}`)
   },
 
-  async deleteDocument(id: string) {
-    return api(`/api/admin/documents/${id}`, { method: 'DELETE' });
+  async deleteDocument(id: string): Promise<{ success: boolean }> {
+    return api<{ success: boolean }>(`${API_ROUTES.ADMIN_DOCUMENTS}/${id}`, { method: "DELETE" })
   },
 
-  async uploadDocument(file: File, docId: string, title: string) {
-    const token = getToken();
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('docId', docId);
-    formData.append('title', title);
-    const res = await fetch('/api/admin/documents/upload', {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${token}` },
+  async uploadDocument(file: File, docId: string, title: string): Promise<{ success: boolean; docId: string }> {
+    const token = getToken()
+    const formData = new FormData()
+    formData.append("file", file)
+    formData.append("docId", docId)
+    formData.append("title", title)
+
+    const res = await fetch(API_ROUTES.ADMIN_UPLOAD, {
+      method: "POST",
+      headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
       body: formData,
-    });
-    if (!res.ok) throw new Error(await res.text());
-    return res.json();
+    })
+
+    if (!res.ok) {
+      const errorText = await res.text().catch(() => "Upload failed")
+      throw new Error(errorText || "Gagal mengunggah dokumen")
+    }
+    return res.json()
   },
-};
+}

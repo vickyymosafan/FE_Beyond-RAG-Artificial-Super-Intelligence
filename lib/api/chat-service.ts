@@ -1,9 +1,10 @@
 /**
- * Chat Service - API layer for chat operations
- * Modified to use LocalStorage for history and direct backend for chat.
+ * Chat Service - API & Storage layer for chat operations
  */
 
-import type { ChatHistory, Message } from "@/types"
+import type { ChatHistory, Message, Citation } from "@/types"
+import { STORAGE_KEYS, API_ROUTES, DEFAULT_MESSAGES } from "@/lib/constants"
+import { logError } from "@/lib/error-handler"
 
 export interface CreateChatResponse {
   chat: ChatHistory | null
@@ -12,34 +13,50 @@ export interface CreateChatResponse {
 
 export interface SendMessageResponse {
   response: string
-  citations?: any[]
+  citations?: Citation[]
   asiScore?: number
   reasoningPath?: string[]
   error?: string
 }
 
-// LocalStorage helpers
+// LocalStorage defensive helpers
 const getStorageChats = (): Record<string, ChatHistory> => {
   if (typeof window === "undefined") return {}
-  const data = localStorage.getItem("smartchat_histories")
-  return data ? JSON.parse(data) : {}
+  try {
+    const data = localStorage.getItem(STORAGE_KEYS.HISTORIES)
+    return data ? JSON.parse(data) : {}
+  } catch (error) {
+    logError("getStorageChats", error)
+    return {}
+  }
 }
 
 const getStorageMessages = (): Record<string, Message[]> => {
   if (typeof window === "undefined") return {}
-  const data = localStorage.getItem("smartchat_messages")
-  return data ? JSON.parse(data) : {}
-}
-
-const saveStorageChats = (chats: Record<string, ChatHistory>) => {
-  if (typeof window !== "undefined") {
-    localStorage.setItem("smartchat_histories", JSON.stringify(chats))
+  try {
+    const data = localStorage.getItem(STORAGE_KEYS.MESSAGES)
+    return data ? JSON.parse(data) : {}
+  } catch (error) {
+    logError("getStorageMessages", error)
+    return {}
   }
 }
 
-const saveStorageMessages = (messages: Record<string, Message[]>) => {
-  if (typeof window !== "undefined") {
-    localStorage.setItem("smartchat_messages", JSON.stringify(messages))
+const saveStorageChats = (chats: Record<string, ChatHistory>): void => {
+  if (typeof window === "undefined") return
+  try {
+    localStorage.setItem(STORAGE_KEYS.HISTORIES, JSON.stringify(chats))
+  } catch (error) {
+    logError("saveStorageChats", error)
+  }
+}
+
+const saveStorageMessages = (messages: Record<string, Message[]>): void => {
+  if (typeof window === "undefined") return
+  try {
+    localStorage.setItem(STORAGE_KEYS.MESSAGES, JSON.stringify(messages))
+  } catch (error) {
+    logError("saveStorageMessages", error)
   }
 }
 
@@ -96,10 +113,10 @@ export async function sendChatMessage(
     const messages = getStorageMessages()
     const chatMessages = messages[chatId] || []
     
-    // Optimistically save user message (optional, but good for local history)
+    // Save user message locally
     chatMessages.push({
       id: `msg_${Date.now()}_user`,
-      sessionId: chatId, // following original logic
+      sessionId: chatId,
       role: "user",
       content: message,
       createdAt: new Date().toISOString(),
@@ -107,7 +124,7 @@ export async function sendChatMessage(
     messages[chatId] = chatMessages
     saveStorageMessages(messages)
     
-    // Update chat title if it's the first message
+    // Update chat title if first message
     const chats = getStorageChats()
     if (chats[chatId] && chatMessages.length <= 1) {
       chats[chatId].title = message.slice(0, 50) + (message.length > 50 ? "..." : "")
@@ -115,29 +132,33 @@ export async function sendChatMessage(
       saveStorageChats(chats)
     }
 
-    // Call actual backend (using the Next.js rewrite or direct URL)
-    const response = await fetch("/api/rag/query", {
+    // Call RAG query API
+    const response = await fetch(API_ROUTES.RAG_QUERY, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ query: message, userId: sessionId }), // Matching Hono API
+      body: JSON.stringify({ query: message, userId: sessionId }),
     })
 
     if (!response.ok) {
       return {
-        response: "Maaf, terjadi kesalahan saat memproses pesan Anda.",
-        error: "Failed to send message",
+        response: DEFAULT_MESSAGES.ERROR_GENERIC,
+        error: `API error status: ${response.status}`,
       }
     }
 
     const data = await response.json()
+    const answerText = data.answer || DEFAULT_MESSAGES.ERROR_GENERIC
     
-    // Save AI response to local history
+    // Save AI response locally
     chatMessages.push({
       id: `msg_${Date.now()}_assistant`,
       sessionId: chatId,
       role: "assistant",
-      content: data.answer || "Maaf, saya tidak dapat memproses permintaan Anda.",
+      content: answerText,
       createdAt: new Date().toISOString(),
+      citations: data.citations,
+      asiScore: data.asiScore,
+      reasoningPath: data.reasoningPath,
     })
     messages[chatId] = chatMessages
     saveStorageMessages(messages)
@@ -148,15 +169,15 @@ export async function sendChatMessage(
     }
 
     return {
-      response: data.answer || "Maaf, saya tidak dapat memproses permintaan Anda.",
+      response: answerText,
       citations: data.citations,
       asiScore: data.asiScore,
-      reasoningPath: data.reasoningPath
+      reasoningPath: data.reasoningPath,
     }
   } catch (error) {
-    console.error("Failed to send message:", error)
+    logError("sendChatMessage", error)
     return {
-      response: "Maaf, terjadi kesalahan saat memproses pesan Anda.",
+      response: DEFAULT_MESSAGES.ERROR_GENERIC,
       error: error instanceof Error ? error.message : String(error),
     }
   }
