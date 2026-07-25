@@ -31,7 +31,7 @@ async function api<T = unknown>(path: string, options?: RequestInit): Promise<T>
       } catch (error) {
         logError("removeToken", error)
       }
-      window.location.href = "/admin"
+      window.location.href = "/vickymosafan"
     }
     throw new Error("Unauthorized")
   }

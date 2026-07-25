@@ -8,7 +8,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
 
   function handleLogout() {
     localStorage.removeItem('admin_token');
-    router.push('/admin');
+    router.push('/vickymosafan');
   }
 
   return (
@@ -18,10 +18,10 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
           <h2 className="font-semibold text-sidebar-foreground">Admin Panel</h2>
         </div>
         <nav className="flex-1 p-2 space-y-1">
-          <Button variant="ghost" className="w-full justify-start gap-2 text-sidebar-foreground" onClick={() => router.push('/admin/dashboard')}>
+          <Button variant="ghost" className="w-full justify-start gap-2 text-sidebar-foreground" onClick={() => router.push('/vickymosafan/dashboard')}>
             <LayoutDashboard className="size-4" /> Dashboard
           </Button>
-          <Button variant="ghost" className="w-full justify-start gap-2 text-sidebar-foreground" onClick={() => router.push('/admin/dashboard')}>
+          <Button variant="ghost" className="w-full justify-start gap-2 text-sidebar-foreground" onClick={() => router.push('/vickymosafan/dashboard')}>
             <FileText className="size-4" /> Dokumen
           </Button>
         </nav>

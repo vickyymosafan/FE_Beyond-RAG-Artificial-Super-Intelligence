@@ -19,7 +19,7 @@ export function LoginForm() {
       const { token } = await adminService.login(username, password);
       localStorage.setItem('admin_token', token);
       toast.success('Login berhasil');
-      router.push('/admin/dashboard');
+      router.push('/vickymosafan/dashboard');
     } catch {
       toast.error('Username atau password salah');
     } finally { setLoading(false); }

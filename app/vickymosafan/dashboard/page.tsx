@@ -14,7 +14,7 @@ export default function AdminDashboardPage() {
 
   useEffect(() => {
     const token = localStorage.getItem('admin_token');
-    if (!token) { router.push('/admin'); return; }
+    if (!token) { router.push('/vickymosafan'); return; }
     loadDocs();
   }, []);
 
