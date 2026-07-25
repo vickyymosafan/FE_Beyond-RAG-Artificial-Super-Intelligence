@@ -39,8 +39,9 @@ export function AboutDialog({ open, onOpenChange }: AboutDialogProps) {
             </ul>
           </div>
           <div>
-            <h4 className="text-sm font-medium mb-2">Versi</h4>
-            <p className="text-sm text-muted-foreground">1.0.0</p>
+            <h4 className="text-sm font-medium mb-2">Versi & Lisensi</h4>
+            <p className="text-sm text-muted-foreground">v1.0.0 (MIT License)</p>
+            <p className="text-xs text-muted-foreground mt-1 font-mono">© 2026 vickymosafan. All rights reserved.</p>
           </div>
         </div>
       </DialogContent>

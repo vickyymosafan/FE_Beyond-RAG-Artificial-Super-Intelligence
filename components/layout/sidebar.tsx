@@ -219,8 +219,8 @@ export function Sidebar({
         {/* Footer Slot (OCP) */}
         {footerSlot}
 
-        {/* About Button */}
-        <div className="p-2 sm:p-3 border-t border-sidebar-border">
+        {/* About Button & Copyright */}
+        <div className="p-2 sm:p-3 border-t border-sidebar-border space-y-1.5">
           <Button
             variant="ghost"
             className="w-full justify-start gap-1.5 sm:gap-2 text-sidebar-foreground hover:bg-sidebar-accent text-xs sm:text-sm h-8 sm:h-9 touch-manipulation"
@@ -229,6 +229,9 @@ export function Sidebar({
             <Info className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             Tentang
           </Button>
+          <div className="px-2 text-[10px] text-muted-foreground/70 font-mono tracking-tight text-center">
+            © 2026 vickymosafan
+          </div>
         </div>
       </aside>
 

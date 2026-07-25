@@ -24,10 +24,13 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
             <LayoutDashboard className="size-4" /> Dashboard
           </Button>
         </nav>
-        <div className="p-3 border-t mt-auto">
+        <div className="p-3 border-t mt-auto space-y-2">
           <Button variant="ghost" className="w-full justify-start gap-2 text-destructive hover:text-destructive hover:bg-destructive/10" onClick={handleLogout}>
             <LogOut className="size-4" /> Keluar
           </Button>
+          <div className="px-2 text-[10px] text-muted-foreground/60 font-mono tracking-tight text-center">
+            © 2026 vickymosafan
+          </div>
         </div>
       </aside>
       <main className="flex-1 overflow-auto">{children}</main>
