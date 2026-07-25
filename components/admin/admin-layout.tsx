@@ -7,7 +7,9 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   function handleLogout() {
-    localStorage.removeItem('admin_token');
+    try {
+      localStorage.removeItem('admin_token');
+    } catch { /* ignore */ }
     router.push('/vickymosafan');
   }
 
@@ -18,15 +20,12 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
           <h2 className="font-semibold text-sidebar-foreground">Admin Panel</h2>
         </div>
         <nav className="flex-1 p-2 space-y-1">
-          <Button variant="ghost" className="w-full justify-start gap-2 text-sidebar-foreground" onClick={() => router.push('/vickymosafan/dashboard')}>
+          <Button variant="secondary" className="w-full justify-start gap-2 text-sidebar-foreground font-medium" onClick={() => router.push('/vickymosafan/dashboard')}>
             <LayoutDashboard className="size-4" /> Dashboard
           </Button>
-          <Button variant="ghost" className="w-full justify-start gap-2 text-sidebar-foreground" onClick={() => router.push('/vickymosafan/dashboard')}>
-            <FileText className="size-4" /> Dokumen
-          </Button>
         </nav>
-        <div className="p-2 border-t">
-          <Button variant="ghost" className="w-full justify-start gap-2 text-sidebar-foreground" onClick={handleLogout}>
+        <div className="p-3 border-t mt-auto">
+          <Button variant="ghost" className="w-full justify-start gap-2 text-destructive hover:text-destructive hover:bg-destructive/10" onClick={handleLogout}>
             <LogOut className="size-4" /> Keluar
           </Button>
         </div>
