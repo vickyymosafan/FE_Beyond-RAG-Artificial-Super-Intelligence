@@ -11,7 +11,7 @@ export function ChatContainer() {
 
   return (
     <div className="flex flex-col h-full min-h-0">
-      <div className="flex-1 min-h-0 overflow-hidden">{hasMessages ? <MessageList /> : <WelcomeScreen />}</div>
+      <div className="flex-1 min-h-0 overflow-hidden flex flex-col">{hasMessages ? <MessageList /> : <WelcomeScreen />}</div>
       <ChatInput />
     </div>
   )
