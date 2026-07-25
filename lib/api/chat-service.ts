@@ -5,6 +5,7 @@
 import type { ChatHistory, Message, Citation } from "@/types"
 import { STORAGE_KEYS, API_ROUTES, DEFAULT_MESSAGES } from "@/lib/constants"
 import { logError } from "@/lib/error-handler"
+import { sanitizeInput } from "@/lib/utils"
 
 export interface CreateChatResponse {
   chat: ChatHistory | null
@@ -110,6 +111,7 @@ export async function sendChatMessage(
   chatId: string
 ): Promise<SendMessageResponse> {
   try {
+    const cleanMessage = sanitizeInput(message)
     const messages = getStorageMessages()
     const chatMessages = messages[chatId] || []
     
@@ -118,7 +120,7 @@ export async function sendChatMessage(
       id: `msg_${Date.now()}_user`,
       sessionId: chatId,
       role: "user",
-      content: message,
+      content: cleanMessage,
       createdAt: new Date().toISOString(),
     })
     messages[chatId] = chatMessages
@@ -136,7 +138,7 @@ export async function sendChatMessage(
     const response = await fetch(API_ROUTES.RAG_QUERY, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ query: message, userId: sessionId }),
+      body: JSON.stringify({ query: cleanMessage, userId: sessionId }),
     })
 
     if (!response.ok) {
