@@ -1,87 +1,43 @@
 # 💬 Smart Agentic AI Chat - Frontend Application
 
-Aplikasi web modern berbasis **Next.js 16 (App Router)**, **React 19**, **TailwindCSS**, dan **Shadcn UI** yang berfungsi sebagai antarmuka antaraksi cerdas untuk sistem **Agentic RAG AI**.
+Aplikasi antarmuka web modern berbasis **Next.js** dan **React** yang dirancang sebagai sarana interaksi cerdas, cepat, dan intuitif antara pengguna dengan sistem kecerdasan buatan **Agentic RAG AI**.
 
 ---
 
-## ✨ Fitur Utama
+## 📄 Deskripsi Aplikasi
 
-- **Antarmuka Chat Interaktif & Responsif**:
-  - Tampilan *dark mode* modern dengan efek *glassmorphic* & animasi halus.
-  - Virtualisasi daftar pesan menggunakan `@tanstack/react-virtual` untuk performa cepat 60fps meskipun berisi ribuan pesan.
-  - Rendering Markdown lengkap dengan *syntax highlighting* & matematika LaTeX (`katex`).
-  - Popover rujukan sumber (*Citations*) interaktif lengkap dengan halaman dokumen pedoman.
-- **Admin Dashboard Tersembunyi (*Route Obscuration*)**:
-  - Halaman Admin terisolasi pada rute khusus `/vickymosafan` & `/vickymosafan/dashboard` (rute standar `/admin` mengembalikan tampilan *404 Not Found* sebagai perlindungan dari bot/hacker).
-  - Ringkasan statistik dokumen & manajemen unggah/hapus file PDF/DOCX.
-- **Keamanan Tingkat Tinggi**:
-  - Penerapan **HTTP Security Headers** (`X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`).
-  - Penyaringan pesan input (*Input Sanitizer*) untuk mencegah serangan XSS & Script Injection.
-- **Defensive Storage & PWA Support**:
-  - Penyimpanan riwayat percakapan lokal di `localStorage` dengan penanganan *try-catch* defensif.
-  - Dukungan **Progressive Web App (PWA)** lengkap dengan manifes web & prompt instalasi iOS/Android.
+Aplikasi frontend ini menyajikan pengalaman obrolan (*conversational UI*) yang responsif dan elegan. Pengguna dapat mengajukan berbagai pertanyaan terkait pedoman dan dokumen akademik, lalu menerima jawaban yang akurat, terstruktur, lengkap dengan rujukan kutipan halaman dokumen asli secara *real-time*.
+
+Aplikasi dibangun dengan memprioritaskan kenyamanan pengguna (*User Experience*), kecepatan rendering, estetika modern, serta standar keamanan antarmuka yang ketat.
 
 ---
 
-## 🎨 Struktur Proyek
+## ✨ Fitur-Fitur Utama
 
-```text
-frontend1/
-├── app/
-│   ├── page.tsx               # Halaman Beranda Chat Utama
-│   ├── vickymosafan/          # Halaman Login Admin & Dashboard
-│   │   ├── page.tsx           # Form Login Admin
-│   │   └── dashboard/page.tsx # Panel Manajemen Dokumen & Statistik
-│   ├── admin/page.tsx         # Decoy 404 Route
-│   ├── error.tsx              # Root Error Boundary
-│   ├── not-found.tsx          # Halaman 404 Custom
-│   └── globals.css            # Desain Sistem & Tema CSS
-├── components/
-│   ├── chat/                  # Komponen Chat (Container, MessageList, MessageItem, Input)
-│   ├── admin/                 # Komponen Panel Admin (Dashboard Layout, DocumentTable, UploadDialog)
-│   ├── layout/                # Sidebar, Header, & Navigation
-│   └── ui/                    # Komponen Basis Shadcn UI
-├── hooks/                     # Custom React Hooks (useMessages, useChatHistory, useOnboarding, etc.)
-├── lib/
-│   ├── api/                   # Service API (chat-service.ts, admin-service.ts)
-│   ├── constants.ts           # Sentralisasi Kunci Storage & Rute API
-│   ├── error-handler.ts       # Centralized Error Logger
-│   └── utils.ts               # Utility Helper & Input Sanitizer
-├── types/                     # Definisi Tipe Data TypeScript Strict
-├── next.config.mjs            # Konfigurasi Next.js, Security Headers, & API Rewrites
-└── README.md
-```
+- **Antarmuka Obrolan AI Modern & Interaktif**:
+  - Desain *Dark Mode* eksklusif dengan sentuhan estetika *glassmorphism* dan animasi mikro yang halus.
+  - Performa tinggi dengan teknik virtualisasi daftar pesan untuk pengalaman obrolan yang tetap lancar (*60fps*) tanpa kendala.
+
+- **Rendering Konten Kaya (*Rich Content Rendering*)**:
+  - Dukungan lengkap untuk format Markdown, tabel data, serta penulisan rumus matematika LaTeX.
+  - Fitur rujukan kutipan sumber (*Citations*) interaktif yang menampilkan asal halaman dokumen pendukung.
+
+- **Manajemen Riwayat Obrolan**:
+  - Penyimpanan riwayat percakapan yang aman dan terorganisir untuk memudahkan pengguna mengakses kembali obrolan sebelumnya.
+
+- **Panel Manajemen Admin**:
+  - Antarmuka khusus untuk administrator dalam memantau statistik sistem serta mengelola dokumen pedoman (unggah dan hapus dokumen).
+
+- **Keamanan Antarmuka & Responsivitas Tingkat Tinggi**:
+  - Penerapan proteksi keamanan *Security Headers* dan penyaringan teks input untuk mencegah potensi ancaman skrip berbahaya.
+  - Responsif penuh untuk berbagai ukuran layar (Desktop, Tablet, dan Mobile).
+  - Dukungan *Progressive Web App (PWA)* untuk pengalaman penggunaan layaknya aplikasi native.
 
 ---
 
-## 🚀 Panduan Memulai
+## 🛠️ Teknologi Utama
 
-### 1. Instalasi Dependensi
-```bash
-npm install
-```
-
-### 2. Jalankan Mode Pengembang (Development)
-```bash
-npm run dev
-```
-Buka [http://localhost:3000](http://localhost:3000) pada browser Anda.
-
-### 3. Build untuk Produksi
-```bash
-npm run build
-npm run start
-```
-
----
-
-## 🔐 Navigasi Rute Rahasia Admin
-
-- **Halaman Utama Chat**: `http://localhost:3000/`
-- **Login Admin**: `http://localhost:3000/vickymosafan`
-- **Dashboard Admin**: `http://localhost:3000/vickymosafan/dashboard`
-
----
-
-## 📄 Lisensi
-© 2026 - Portfolio Project RAG AI Agentic. All Rights Reserved.
+- **Core Framework**: Next.js & React
+- **Styling & Components**: TailwindCSS & Shadcn UI
+- **State & Virtualization**: TanStack Virtual
+- **Icons & Typography**: Lucide Icons & Google Fonts
