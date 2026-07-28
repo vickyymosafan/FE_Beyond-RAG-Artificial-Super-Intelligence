@@ -134,11 +134,20 @@ export async function sendChatMessage(
       saveStorageChats(chats)
     }
 
+    const historyPayload = chatMessages.slice(-5, -1).map(m => ({
+      role: m.role,
+      content: m.content,
+    }))
+
     // Call RAG query API
     const response = await fetch(API_ROUTES.RAG_QUERY, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ query: cleanMessage, userId: sessionId }),
+      body: JSON.stringify({
+        query: cleanMessage,
+        userId: sessionId,
+        history: historyPayload,
+      }),
     })
 
     if (!response.ok) {
