@@ -15,33 +15,33 @@ interface MarkdownRendererProps {
 const remarkPlugins = [remarkGfm]
 
 // ============================================
-// STATIC MARKDOWN COMPONENTS (defined outside render)
-// This prevents 25+ functions from being re-created on every render
+// MICROSOFT WORD / DOCUMENT STYLE MARKDOWN COMPONENTS
+// Clean typography, crisp document hierarchy, proper list indents
 // ============================================
 const markdownComponents = {
-  // Headings - Responsive sizes for mobile
+  // Headings - Clean document headers
   h1: ({ children }: { children?: React.ReactNode }) => (
-    <h1 className="text-lg sm:text-xl md:text-2xl font-bold mt-4 sm:mt-6 mb-3 sm:mb-4 pb-2 border-b border-border first:mt-0">
+    <h1 className="text-xl sm:text-2xl font-semibold tracking-tight mt-5 mb-3 text-foreground pb-1.5 border-b border-border/60 first:mt-0">
       {children}
     </h1>
   ),
   h2: ({ children }: { children?: React.ReactNode }) => (
-    <h2 className="text-base sm:text-lg md:text-xl font-semibold mt-3 sm:mt-5 mb-2 sm:mb-3 pb-1 border-b border-border/50">
+    <h2 className="text-lg sm:text-xl font-semibold tracking-tight mt-4 mb-2.5 text-foreground pb-1 border-b border-border/40">
       {children}
     </h2>
   ),
   h3: ({ children }: { children?: React.ReactNode }) => (
-    <h3 className="text-sm sm:text-base md:text-lg font-semibold mt-3 sm:mt-4 mb-1.5 sm:mb-2">
+    <h3 className="text-base sm:text-lg font-semibold tracking-tight mt-3.5 mb-2 text-foreground">
       {children}
     </h3>
   ),
   h4: ({ children }: { children?: React.ReactNode }) => (
-    <h4 className="text-sm sm:text-base font-semibold mt-2 sm:mt-3 mb-1 sm:mb-2">
+    <h4 className="text-sm sm:text-base font-semibold mt-3 mb-1.5 text-foreground">
       {children}
     </h4>
   ),
   h5: ({ children }: { children?: React.ReactNode }) => (
-    <h5 className="text-xs sm:text-sm font-semibold mt-2 mb-1">{children}</h5>
+    <h5 className="text-xs sm:text-sm font-semibold mt-2 mb-1 text-foreground">{children}</h5>
   ),
   h6: ({ children }: { children?: React.ReactNode }) => (
     <h6 className="text-xs sm:text-sm font-medium mt-2 mb-1 text-muted-foreground">
@@ -49,42 +49,42 @@ const markdownComponents = {
     </h6>
   ),
 
-  // Paragraphs - Tighter line height on mobile
+  // Paragraphs - Word-like body text
   p: ({ children }: { children?: React.ReactNode }) => (
-    <p className="my-2 sm:my-3 leading-6 sm:leading-7 text-sm sm:text-base first:mt-0 last:mb-0">
+    <p className="my-2.5 leading-relaxed text-sm sm:text-base text-foreground/90 font-sans tracking-normal first:mt-0 last:mb-0">
       {children}
     </p>
   ),
 
-  // Lists - Smaller indent on mobile
+  // Lists - Microsoft Word Outlining & Hierarchy Indentation
   ul: ({ children }: { children?: React.ReactNode }) => (
-    <ul className="my-2 sm:my-3 ml-4 sm:ml-6 list-disc space-y-0.5 sm:space-y-1">
+    <ul className="my-2.5 ml-5 sm:ml-6 list-disc space-y-1 text-foreground/90 font-sans">
       {children}
     </ul>
   ),
   ol: ({ children }: { children?: React.ReactNode }) => (
-    <ol className="my-2 sm:my-3 ml-4 sm:ml-6 list-decimal space-y-0.5 sm:space-y-1">
+    <ol className="my-2.5 ml-5 sm:ml-6 list-decimal space-y-1 text-foreground/90 font-sans">
       {children}
     </ol>
   ),
   li: ({ children }: { children?: React.ReactNode }) => (
-    <li className="leading-6 sm:leading-7 text-sm sm:text-base">{children}</li>
+    <li className="leading-relaxed text-sm sm:text-base pl-1 marker:text-primary/70">{children}</li>
   ),
 
-  // Blockquote
+  // Callouts & Blockquotes - Document Quote Box
   blockquote: ({ children }: { children?: React.ReactNode }) => (
-    <blockquote className="my-4 border-l-4 border-primary/30 pl-4 italic text-muted-foreground">
+    <blockquote className="my-3.5 border-l-4 border-primary/60 bg-muted/40 px-4 py-2.5 rounded-r-lg italic text-muted-foreground text-sm font-sans">
       {children}
     </blockquote>
   ),
 
-  // Code - Responsive padding
+  // Code - Crisp inline badges and code blocks
   code: ({ className, children, ...props }: { className?: string; children?: React.ReactNode }) => {
     const isInline = !className
     if (isInline) {
       return (
         <code
-          className="relative rounded bg-muted px-1 sm:px-[0.3rem] py-[0.1rem] sm:py-[0.2rem] font-mono text-xs sm:text-sm"
+          className="relative rounded bg-muted/80 px-1.5 py-0.5 font-mono text-xs sm:text-sm border border-border/50 text-foreground font-normal"
           {...props}
         >
           {children}
@@ -93,12 +93,12 @@ const markdownComponents = {
     }
     const language = className?.replace("language-", "") || "text"
     return (
-      <div className="my-3 sm:my-4 overflow-hidden rounded-lg border bg-muted/50">
-        <div className="flex items-center justify-between bg-muted px-3 sm:px-4 py-1.5 sm:py-2 text-xs text-muted-foreground">
+      <div className="my-3.5 overflow-hidden rounded-lg border border-border/80 bg-muted/40 shadow-xs">
+        <div className="flex items-center justify-between bg-muted/80 px-3.5 py-1.5 text-xs text-muted-foreground font-mono font-medium border-b border-border/50">
           <span>{language}</span>
         </div>
-        <pre className="overflow-x-auto p-3 sm:p-4">
-          <code className={cn("font-mono text-xs sm:text-sm", className)} {...props}>
+        <pre className="overflow-x-auto p-3.5">
+          <code className={cn("font-mono text-xs sm:text-sm text-foreground", className)} {...props}>
             {children}
           </code>
         </pre>
@@ -107,26 +107,26 @@ const markdownComponents = {
   },
   pre: ({ children }: { children?: React.ReactNode }) => <>{children}</>,
 
-  // Table - Responsive padding
+  // Table - Word Document Table Format
   table: ({ children }: { children?: React.ReactNode }) => (
-    <div className="my-3 sm:my-4 overflow-x-auto rounded-lg border">
-      <table className="w-full border-collapse text-xs sm:text-sm">{children}</table>
+    <div className="my-4 overflow-x-auto rounded-lg border border-border/80 shadow-xs">
+      <table className="w-full border-collapse text-xs sm:text-sm font-sans">{children}</table>
     </div>
   ),
   thead: ({ children }: { children?: React.ReactNode }) => (
-    <thead className="bg-muted/50">{children}</thead>
+    <thead className="bg-muted/70 border-b border-border text-foreground font-semibold">{children}</thead>
   ),
   tbody: ({ children }: { children?: React.ReactNode }) => (
-    <tbody className="divide-y divide-border">{children}</tbody>
+    <tbody className="divide-y divide-border/60 bg-card">{children}</tbody>
   ),
   tr: ({ children }: { children?: React.ReactNode }) => (
-    <tr className="border-b border-border last:border-0">{children}</tr>
+    <tr className="border-b border-border/60 hover:bg-muted/30 transition-colors last:border-0">{children}</tr>
   ),
   th: ({ children }: { children?: React.ReactNode }) => (
-    <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-semibold">{children}</th>
+    <th className="px-3.5 sm:px-4 py-2.5 text-left font-semibold text-foreground">{children}</th>
   ),
   td: ({ children }: { children?: React.ReactNode }) => (
-    <td className="px-2 sm:px-4 py-2 sm:py-3">{children}</td>
+    <td className="px-3.5 sm:px-4 py-2 text-foreground/90">{children}</td>
   ),
 
   // Links
@@ -135,31 +135,31 @@ const markdownComponents = {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-primary underline underline-offset-4 hover:text-primary/80 transition-colors"
+      className="text-primary font-medium underline underline-offset-4 hover:text-primary/80 transition-colors"
     >
       {children}
     </a>
   ),
 
-  // Images - use proper HTML attributes
+  // Images
   img: (props: React.ImgHTMLAttributes<HTMLImageElement>) => (
     <span className="block my-4">
       <img
         {...props}
         src={typeof props.src === 'string' ? props.src : ''}
         alt={props.alt || ""}
-        className="rounded-lg max-w-full h-auto border"
+        className="rounded-lg max-w-full h-auto border border-border shadow-xs"
         loading="lazy"
       />
     </span>
   ),
 
   // Horizontal rule
-  hr: () => <hr className="my-6 border-border" />,
+  hr: () => <hr className="my-5 border-border/60" />,
 
   // Strong and emphasis
   strong: ({ children }: { children?: React.ReactNode }) => (
-    <strong className="font-semibold">{children}</strong>
+    <strong className="font-semibold text-foreground">{children}</strong>
   ),
   em: ({ children }: { children?: React.ReactNode }) => (
     <em className="italic">{children}</em>
@@ -189,14 +189,13 @@ const markdownComponents = {
 export const MarkdownRenderer = React.memo(
   function MarkdownRenderer({ content, className }: MarkdownRendererProps) {
     return (
-      <div className={cn("prose prose-sm dark:prose-invert max-w-none", className)}>
+      <div className={cn("prose prose-sm dark:prose-invert max-w-none font-sans leading-relaxed text-foreground", className)}>
         <ReactMarkdown remarkPlugins={remarkPlugins} components={markdownComponents}>
           {content}
         </ReactMarkdown>
       </div>
     )
   },
-  // Custom comparison - only re-render if content or className changed
   (prevProps, nextProps) =>
     prevProps.content === nextProps.content && prevProps.className === nextProps.className
 )
