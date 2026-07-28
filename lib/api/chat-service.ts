@@ -3,7 +3,7 @@
  */
 
 import type { ChatHistory, Message, Citation } from "@/types"
-import { STORAGE_KEYS, API_ROUTES, DEFAULT_MESSAGES } from "@/lib/constants"
+import { STORAGE_KEYS, API_ROUTES, DEFAULT_MESSAGES, UI_STRINGS, LIMITS } from "@/lib/constants"
 import { logError } from "@/lib/error-handler"
 import { sanitizeInput } from "@/lib/utils"
 
@@ -21,46 +21,32 @@ export interface SendMessageResponse {
   error?: string
 }
 
-// LocalStorage defensive helpers
-const getStorageChats = (): Record<string, ChatHistory> => {
-  if (typeof window === "undefined") return {}
+const MSG_PREFIX = "msg_"
+
+function getStorageData<T>(key: string): T {
+  if (typeof window === "undefined") return {} as T
   try {
-    const data = localStorage.getItem(STORAGE_KEYS.HISTORIES)
-    return data ? JSON.parse(data) : {}
+    const data = localStorage.getItem(key)
+    return data ? JSON.parse(data) : ({} as T)
   } catch (error) {
-    logError("getStorageChats", error)
-    return {}
+    logError(`getStorageData:${key}`, error)
+    return {} as T
   }
 }
 
-const getStorageMessages = (): Record<string, Message[]> => {
-  if (typeof window === "undefined") return {}
-  try {
-    const data = localStorage.getItem(STORAGE_KEYS.MESSAGES)
-    return data ? JSON.parse(data) : {}
-  } catch (error) {
-    logError("getStorageMessages", error)
-    return {}
-  }
-}
-
-const saveStorageChats = (chats: Record<string, ChatHistory>): void => {
+function saveStorageData<T>(key: string, data: T): void {
   if (typeof window === "undefined") return
   try {
-    localStorage.setItem(STORAGE_KEYS.HISTORIES, JSON.stringify(chats))
+    localStorage.setItem(key, JSON.stringify(data))
   } catch (error) {
-    logError("saveStorageChats", error)
+    logError(`saveStorageData:${key}`, error)
   }
 }
 
-const saveStorageMessages = (messages: Record<string, Message[]>): void => {
-  if (typeof window === "undefined") return
-  try {
-    localStorage.setItem(STORAGE_KEYS.MESSAGES, JSON.stringify(messages))
-  } catch (error) {
-    logError("saveStorageMessages", error)
-  }
-}
+const getStorageChats = (): Record<string, ChatHistory> => getStorageData(STORAGE_KEYS.HISTORIES)
+const getStorageMessages = (): Record<string, Message[]> => getStorageData(STORAGE_KEYS.MESSAGES)
+const saveStorageChats = (chats: Record<string, ChatHistory>): void => saveStorageData(STORAGE_KEYS.HISTORIES, chats)
+const saveStorageMessages = (messages: Record<string, Message[]>): void => saveStorageData(STORAGE_KEYS.MESSAGES, messages)
 
 /**
  * Create a new chat session
@@ -74,7 +60,7 @@ export async function createChat(
   const newChat: ChatHistory = {
     id: chatId,
     sessionId: sessionId,
-    title: title || "Percakapan Baru",
+    title: title || UI_STRINGS.NEW_CHAT_TITLE,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   }
@@ -118,7 +104,7 @@ export async function sendChatMessage(
     
     // Save user message locally
     chatMessages.push({
-      id: `msg_${Date.now()}_user`,
+      id: `${MSG_PREFIX}${Date.now()}_user`,
       sessionId: chatId,
       role: "user",
       content: cleanMessage,
@@ -130,12 +116,12 @@ export async function sendChatMessage(
     // Update chat title if first message
     const chats = getStorageChats()
     if (chats[chatId] && chatMessages.length <= 1) {
-      chats[chatId].title = message.slice(0, 50) + (message.length > 50 ? "..." : "")
+      chats[chatId].title = message.slice(0, LIMITS.TITLE_MAX_LENGTH) + (message.length > LIMITS.TITLE_MAX_LENGTH ? "..." : "")
       chats[chatId].updatedAt = new Date().toISOString()
       saveStorageChats(chats)
     }
 
-    const historyPayload = chatMessages.slice(-5, -1).map(m => ({
+    const historyPayload = chatMessages.slice(-LIMITS.HISTORY_DEPTH, -1).map(m => ({
       role: m.role,
       content: m.content,
     }))
@@ -169,7 +155,7 @@ export async function sendChatMessage(
     
     // Save AI response locally
     chatMessages.push({
-      id: `msg_${Date.now()}_assistant`,
+      id: `${MSG_PREFIX}${Date.now()}_assistant`,
       sessionId: chatId,
       role: "assistant",
       content: answerText,

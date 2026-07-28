@@ -7,6 +7,7 @@ export const STORAGE_KEYS = {
   MESSAGES: "smartchat_messages",
   ADMIN_TOKEN: "admin_token",
   PREFERENCES: "smartchat_preferences",
+  SESSION_ID: "smartchat-session-id",
 } as const
 
 export const API_ROUTES = {
@@ -18,6 +19,27 @@ export const API_ROUTES = {
   ADMIN_STATS_RPD: "/api/admin/stats/rpd",
   ADMIN_CACHE_TOP: "/api/admin/cache/top",
   ADMIN_FAQ: "/api/admin/faq",
+  ADMIN_CACHE_CLEAR: "/api/admin/cache/clear",
+} as const
+
+export const UI_STRINGS = {
+  NEW_CHAT_TITLE: "Percakapan Baru",
+  CACHE_HIT_LABEL: "Cache Hit • Respon Instan",
+  CACHE_HIT_CHECK: "cache hit",
+  DEFAULT_FAST_TIME: "<50ms",
+  UMJ_LOGO_PATH: "/UMJ.webp",
+  AI_AVATAR_TEXT: "AI",
+} as const
+
+export const ADMIN_ROUTES = {
+  LOGIN: "/vickymosafan",
+  DASHBOARD: "/vickymosafan/dashboard",
+} as const
+
+export const LIMITS = {
+  TITLE_MAX_LENGTH: 50,
+  HISTORY_DEPTH: 5,
+  TIME_UNIT_MS: 1000,
 } as const
 
 export const DEFAULT_MESSAGES = {

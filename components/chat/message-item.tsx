@@ -17,6 +17,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { User, Zap } from "lucide-react"
 import Image from "next/image"
 import type { MessageItemProps } from "@/types/segregated-props"
+import { UI_STRINGS, LIMITS } from "@/lib/constants"
 
 // Lazy load MarkdownRenderer (~100KB react-markdown bundle)
 const MarkdownRenderer = dynamic(
@@ -46,8 +47,8 @@ const DefaultUserAvatar = () => (
 
 const DefaultAssistantAvatar = () => (
   <Image 
-    src="/UMJ.webp" 
-    alt="AI" 
+    src={UI_STRINGS.UMJ_LOGO_PATH} 
+    alt={UI_STRINGS.AI_AVATAR_TEXT} 
     width={32} 
     height={32} 
     className="h-7 w-7 sm:h-8 sm:w-8 shrink-0 rounded-full" 
@@ -73,11 +74,11 @@ const DefaultAssistantContent = ({
   reasoningPath?: string[] 
   responseTimeMs?: number
 }) => {
-  const isCacheHit = reasoningPath?.some((r) => r.toLowerCase().includes("cache hit"))
+  const isCacheHit = reasoningPath?.some((r) => r.toLowerCase().includes(UI_STRINGS.CACHE_HIT_CHECK))
 
   const durationLabel = responseTimeMs
-    ? (responseTimeMs < 1000 ? `${responseTimeMs}ms` : `${(responseTimeMs / 1000).toFixed(1)}s`)
-    : "<50ms"
+    ? (responseTimeMs < LIMITS.TIME_UNIT_MS ? `${responseTimeMs}ms` : `${(responseTimeMs / LIMITS.TIME_UNIT_MS).toFixed(1)}s`)
+    : UI_STRINGS.DEFAULT_FAST_TIME
 
   return (
     <div className="space-y-1.5">
@@ -87,7 +88,7 @@ const DefaultAssistantContent = ({
       {isCacheHit && (
         <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-mono font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 shadow-sm animate-in fade-in slide-in-from-top-1 duration-300">
           <Zap className="size-3 text-emerald-500 fill-emerald-500/30 animate-pulse" />
-          <span>Cache Hit • Respon Instan ({durationLabel})</span>
+          <span>{UI_STRINGS.CACHE_HIT_LABEL} ({durationLabel})</span>
         </div>
       )}
     </div>

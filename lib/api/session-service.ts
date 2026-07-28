@@ -4,8 +4,7 @@
  */
 
 import { generateId } from "@/lib/utils"
-
-const STORAGE_KEY = "smartchat-session-id"
+import { STORAGE_KEYS } from "@/lib/constants"
 
 /**
  * Get or create a session ID from sessionStorage
@@ -13,12 +12,17 @@ const STORAGE_KEY = "smartchat-session-id"
 export function getStoredSessionId(): string {
   if (typeof window === "undefined") return generateId("session")
   
-  let sessionId = sessionStorage.getItem(STORAGE_KEY)
-  if (!sessionId) {
-    sessionId = generateId("session")
-    sessionStorage.setItem(STORAGE_KEY, sessionId)
+  try {
+    let sessionId = sessionStorage.getItem(STORAGE_KEYS.SESSION_ID)
+    if (!sessionId) {
+      sessionId = generateId("session")
+      sessionStorage.setItem(STORAGE_KEYS.SESSION_ID, sessionId)
+    }
+    return sessionId
+  } catch (error) {
+    console.error("Session storage error", error)
+    return generateId("session")
   }
-  return sessionId
 }
 
 /**
@@ -26,7 +30,11 @@ export function getStoredSessionId(): string {
  */
 export function storeSessionId(sessionId: string): void {
   if (typeof window !== "undefined") {
-    sessionStorage.setItem(STORAGE_KEY, sessionId)
+    try {
+      sessionStorage.setItem(STORAGE_KEYS.SESSION_ID, sessionId)
+    } catch (error) {
+      console.error("Session storage error", error)
+    }
   }
 }
 
@@ -42,8 +50,7 @@ export async function createSession(sessionId: string): Promise<boolean> {
  * If the initial session fails, generates a new session ID and retries
  */
 export async function createSessionWithRetry(
-  initialSessionId: string,
-  maxRetries = 2
+  initialSessionId: string
 ): Promise<{ success: boolean; sessionId: string }> {
   let sessionId = initialSessionId
   storeSessionId(sessionId)

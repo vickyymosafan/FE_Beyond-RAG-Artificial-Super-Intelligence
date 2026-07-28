@@ -172,4 +172,3 @@ export function useOnboarding(): OnboardingReturn {
   };
 }
 
-export default useOnboarding;

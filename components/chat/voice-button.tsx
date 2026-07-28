@@ -145,4 +145,3 @@ export function VoiceButton({
   )
 }
 
-export default VoiceButton

@@ -1,5 +1,5 @@
 import type { AdminDocument } from "@/types"
-import { STORAGE_KEYS, API_ROUTES } from "@/lib/constants"
+import { STORAGE_KEYS, API_ROUTES, ADMIN_ROUTES } from "@/lib/constants"
 import { logError } from "@/lib/error-handler"
 
 export type { AdminDocument }
@@ -31,7 +31,6 @@ async function api<T = unknown>(path: string, options?: RequestInit): Promise<T>
       } catch (error) {
         logError("removeToken", error)
       }
-      window.location.href = "/vickymosafan"
     }
     throw new Error("Unauthorized")
   }
@@ -87,6 +86,6 @@ export const adminService = {
   },
 
   async clearCache(): Promise<{ success: boolean; deleted: number }> {
-    return api<{ success: boolean; deleted: number }>("/api/admin/cache/clear", { method: "POST" })
+    return api<{ success: boolean; deleted: number }>(API_ROUTES.ADMIN_CACHE_CLEAR, { method: "POST" })
   },
 }

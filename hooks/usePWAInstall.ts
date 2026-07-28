@@ -215,4 +215,3 @@ export function usePWAInstall(): PWAInstallReturn {
   };
 }
 
-export default usePWAInstall;

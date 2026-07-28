@@ -8,7 +8,7 @@
  * - Offline mode support
  */
 
-import type { ChatHistory, Message } from "@/types"
+import type { ChatHistory, Message, Citation } from "@/types"
 
 // ============================================
 // Response Types
@@ -21,7 +21,7 @@ export interface CreateChatResponse {
 
 export interface SendMessageResponse {
   response: string
-  citations?: any[]
+  citations?: Citation[]
   asiScore?: number
   reasoningPath?: string[]
   responseTimeMs?: number
