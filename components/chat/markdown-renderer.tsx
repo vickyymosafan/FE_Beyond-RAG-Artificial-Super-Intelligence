@@ -15,6 +15,52 @@ interface MarkdownRendererProps {
 const remarkPlugins = [remarkGfm]
 
 // ============================================
+// SMART MS WORD OUTLINING PREPROCESSOR
+// Auto-detects unindented sub-items ('a. ', 'b. ', '1) ', 'a) ')
+// and converts them to structured markdown lists with Word-style hierarchy
+// ============================================
+function preprocessMarkdownForWordOutlining(raw: string): string {
+  if (!raw) return ""
+  const lines = raw.split("\n")
+  const processed: string[] = []
+
+  let inNumberedList = false
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i]
+    const trimmed = line.trim()
+
+    const isNumberItem = /^\d+[.)]\s+/.test(trimmed)
+    const isLetterItem = /^[a-z][.)]\s+/i.test(trimmed)
+    const isBulletItem = /^[-*•]\s+/.test(trimmed)
+
+    if (isNumberItem) {
+      inNumberedList = true
+      processed.push(line)
+    } else if (isLetterItem) {
+      // Auto-indent letter sub-items (a., b., c.) under previous numbered item like MS Word
+      if (!line.startsWith("    ") && !line.startsWith("\t")) {
+        processed.push("    " + line)
+      } else {
+        processed.push(line)
+      }
+    } else if (isBulletItem && inNumberedList) {
+      // Auto-indent bullet sub-items under numbered list
+      if (!line.startsWith("    ") && !line.startsWith("\t")) {
+        processed.push("    " + line)
+      } else {
+        processed.push(line)
+      }
+    } else {
+      if (trimmed === "") inNumberedList = false
+      processed.push(line)
+    }
+  }
+
+  return processed.join("\n")
+}
+
+// ============================================
 // MICROSOFT WORD OUTLINING & DOCUMENT FORMATTING
 // Preserves original font while providing MS Word document layout & list indents
 // ============================================
@@ -56,19 +102,19 @@ const markdownComponents = {
     </p>
   ),
 
-  // Lists - Microsoft Word Style Outlining & Hierarchical Tab Indentation
+  // Lists - Microsoft Word Hanging Indents & Outlining Alignment
   ul: ({ children }: { children?: React.ReactNode }) => (
-    <ul className="my-2.5 ml-6 sm:ml-8 list-disc space-y-1 text-foreground/90">
+    <ul className="my-2.5 pl-6 sm:pl-8 list-disc space-y-1.5 text-foreground/90">
       {children}
     </ul>
   ),
   ol: ({ children }: { children?: React.ReactNode }) => (
-    <ol className="my-2.5 ml-6 sm:ml-8 list-decimal space-y-1 text-foreground/90">
+    <ol className="my-2.5 pl-6 sm:pl-8 list-decimal space-y-1.5 text-foreground/90">
       {children}
     </ol>
   ),
   li: ({ children }: { children?: React.ReactNode }) => (
-    <li className="leading-relaxed text-sm sm:text-base pl-1 marker:text-primary/80">{children}</li>
+    <li className="leading-relaxed text-sm sm:text-base pl-1.5 marker:text-primary font-medium">{children}</li>
   ),
 
   // Callouts & Blockquotes - Document Quote Box
@@ -188,10 +234,15 @@ const markdownComponents = {
 // ============================================
 export const MarkdownRenderer = React.memo(
   function MarkdownRenderer({ content, className }: MarkdownRendererProps) {
+    const formattedContent = React.useMemo(
+      () => preprocessMarkdownForWordOutlining(content),
+      [content]
+    )
+
     return (
       <div className={cn("prose prose-sm dark:prose-invert max-w-none leading-relaxed text-foreground", className)}>
         <ReactMarkdown remarkPlugins={remarkPlugins} components={markdownComponents}>
-          {content}
+          {formattedContent}
         </ReactMarkdown>
       </div>
     )
