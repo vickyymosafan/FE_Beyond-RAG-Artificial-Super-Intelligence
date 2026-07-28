@@ -40,9 +40,9 @@ html[data-color-scheme="default"] {
   --sidebar-accent-foreground: oklch(0.3772 0.0619 212.664);
   --sidebar-border: oklch(0.8931 0.0205 204.4136);
   --sidebar-ring: oklch(0.5624 0.0947 203.2755);
-  --font-sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-serif: Calibri, Georgia, Cambria, "Times New Roman", Times, serif;
-  --font-mono: Fira Code, "Cascadia Code", Consolas, monospace;
+  --font-sans: Courier New, monospace;
+  --font-serif: Courier New, monospace;
+  --font-mono: Courier New, monospace;
   --radius: 0.125rem;
   --shadow-x: 1px;
   --shadow-y: 1px;
@@ -104,9 +104,9 @@ html[data-color-scheme="default"].dark {
   --sidebar-accent-foreground: oklch(0.852 0.1269 195.0354);
   --sidebar-border: oklch(0.3775 0.0564 216.501);
   --sidebar-ring: oklch(0.852 0.1269 195.0354);
-  --font-sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-serif: Calibri, Georgia, Cambria, "Times New Roman", Times, serif;
-  --font-mono: Fira Code, "Cascadia Code", Consolas, monospace;
+  --font-sans: Source Code Pro, monospace;
+  --font-serif: Source Code Pro, monospace;
+  --font-mono: Source Code Pro, monospace;
   --radius: 0.125rem;
   --shadow-x: 1px;
   --shadow-y: 1px;

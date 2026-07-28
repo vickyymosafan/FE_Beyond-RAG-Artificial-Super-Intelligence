@@ -15,8 +15,8 @@ interface MarkdownRendererProps {
 const remarkPlugins = [remarkGfm]
 
 // ============================================
-// MICROSOFT WORD / DOCUMENT STYLE MARKDOWN COMPONENTS
-// Clean typography, crisp document hierarchy, proper list indents
+// MICROSOFT WORD OUTLINING & DOCUMENT FORMATTING
+// Preserves original font while providing MS Word document layout & list indents
 // ============================================
 const markdownComponents = {
   // Headings - Clean document headers
@@ -49,36 +49,36 @@ const markdownComponents = {
     </h6>
   ),
 
-  // Paragraphs - Word-like body text
+  // Paragraphs - Body text
   p: ({ children }: { children?: React.ReactNode }) => (
-    <p className="my-2.5 leading-relaxed text-sm sm:text-base text-foreground/90 font-sans tracking-normal first:mt-0 last:mb-0">
+    <p className="my-2.5 leading-relaxed text-sm sm:text-base text-foreground/90 tracking-normal first:mt-0 last:mb-0">
       {children}
     </p>
   ),
 
-  // Lists - Microsoft Word Outlining & Hierarchy Indentation
+  // Lists - Microsoft Word Style Outlining & Hierarchical Tab Indentation
   ul: ({ children }: { children?: React.ReactNode }) => (
-    <ul className="my-2.5 ml-5 sm:ml-6 list-disc space-y-1 text-foreground/90 font-sans">
+    <ul className="my-2.5 ml-6 sm:ml-8 list-disc space-y-1 text-foreground/90">
       {children}
     </ul>
   ),
   ol: ({ children }: { children?: React.ReactNode }) => (
-    <ol className="my-2.5 ml-5 sm:ml-6 list-decimal space-y-1 text-foreground/90 font-sans">
+    <ol className="my-2.5 ml-6 sm:ml-8 list-decimal space-y-1 text-foreground/90">
       {children}
     </ol>
   ),
   li: ({ children }: { children?: React.ReactNode }) => (
-    <li className="leading-relaxed text-sm sm:text-base pl-1 marker:text-primary/70">{children}</li>
+    <li className="leading-relaxed text-sm sm:text-base pl-1 marker:text-primary/80">{children}</li>
   ),
 
   // Callouts & Blockquotes - Document Quote Box
   blockquote: ({ children }: { children?: React.ReactNode }) => (
-    <blockquote className="my-3.5 border-l-4 border-primary/60 bg-muted/40 px-4 py-2.5 rounded-r-lg italic text-muted-foreground text-sm font-sans">
+    <blockquote className="my-3.5 border-l-4 border-primary/60 bg-muted/40 px-4 py-2.5 rounded-r-lg italic text-muted-foreground text-sm">
       {children}
     </blockquote>
   ),
 
-  // Code - Crisp inline badges and code blocks
+  // Code - Inline badges and code blocks
   code: ({ className, children, ...props }: { className?: string; children?: React.ReactNode }) => {
     const isInline = !className
     if (isInline) {
@@ -110,7 +110,7 @@ const markdownComponents = {
   // Table - Word Document Table Format
   table: ({ children }: { children?: React.ReactNode }) => (
     <div className="my-4 overflow-x-auto rounded-lg border border-border/80 shadow-xs">
-      <table className="w-full border-collapse text-xs sm:text-sm font-sans">{children}</table>
+      <table className="w-full border-collapse text-xs sm:text-sm">{children}</table>
     </div>
   ),
   thead: ({ children }: { children?: React.ReactNode }) => (
@@ -189,7 +189,7 @@ const markdownComponents = {
 export const MarkdownRenderer = React.memo(
   function MarkdownRenderer({ content, className }: MarkdownRendererProps) {
     return (
-      <div className={cn("prose prose-sm dark:prose-invert max-w-none font-sans leading-relaxed text-foreground", className)}>
+      <div className={cn("prose prose-sm dark:prose-invert max-w-none leading-relaxed text-foreground", className)}>
         <ReactMarkdown remarkPlugins={remarkPlugins} components={markdownComponents}>
           {content}
         </ReactMarkdown>
