@@ -85,4 +85,8 @@ export const adminService = {
     }
     return res.json()
   },
+
+  async clearCache(): Promise<{ success: boolean; deleted: number }> {
+    return api<{ success: boolean; deleted: number }>("/api/admin/cache/clear", { method: "POST" })
+  },
 }
