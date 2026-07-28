@@ -118,6 +118,9 @@ export function useMessages(options: UseMessagesOptions): MessageActions {
         role: "assistant",
         content: result.response,
         createdAt: nowISO(),
+        citations: result.citations,
+        asiScore: result.asiScore,
+        reasoningPath: result.reasoningPath,
       }
       setMessages((prev) => [...prev, assistantMessage])
 
