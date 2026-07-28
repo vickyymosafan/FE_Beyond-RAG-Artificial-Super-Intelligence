@@ -24,6 +24,7 @@ export interface SendMessageResponse {
   citations?: any[]
   asiScore?: number
   reasoningPath?: string[]
+  responseTimeMs?: number
   error?: string
 }
 

@@ -66,12 +66,18 @@ const DefaultUserContent = ({ content }: { content: string }) => (
 
 const DefaultAssistantContent = ({ 
   content, 
-  reasoningPath 
+  reasoningPath,
+  responseTimeMs,
 }: { 
   content: string
   reasoningPath?: string[] 
+  responseTimeMs?: number
 }) => {
   const isCacheHit = reasoningPath?.some((r) => r.toLowerCase().includes("cache hit"))
+
+  const durationLabel = responseTimeMs
+    ? (responseTimeMs < 1000 ? `${responseTimeMs}ms` : `${(responseTimeMs / 1000).toFixed(1)}s`)
+    : "<50ms"
 
   return (
     <div className="space-y-1.5">
@@ -81,7 +87,7 @@ const DefaultAssistantContent = ({
       {isCacheHit && (
         <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-mono font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 shadow-sm animate-in fade-in slide-in-from-top-1 duration-300">
           <Zap className="size-3 text-emerald-500 fill-emerald-500/30 animate-pulse" />
-          <span>Cache Hit • Respon Instan (&lt;50ms)</span>
+          <span>Cache Hit • Respon Instan ({durationLabel})</span>
         </div>
       )}
     </div>
@@ -114,7 +120,7 @@ export const MessageItem = React.memo(function MessageItem({
     ? renderContent(message.content, message.role as 'user' | 'assistant')
     : (isUser 
         ? <DefaultUserContent content={message.content} />
-        : <DefaultAssistantContent content={message.content} reasoningPath={message.reasoningPath} />
+        : <DefaultAssistantContent content={message.content} reasoningPath={message.reasoningPath} responseTimeMs={message.responseTimeMs} />
       )
 
   return (

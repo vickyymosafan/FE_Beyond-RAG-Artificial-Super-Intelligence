@@ -121,6 +121,7 @@ export function useMessages(options: UseMessagesOptions): MessageActions {
         citations: result.citations,
         asiScore: result.asiScore,
         reasoningPath: result.reasoningPath,
+        responseTimeMs: result.responseTimeMs,
       }
       setMessages((prev) => [...prev, assistantMessage])
 

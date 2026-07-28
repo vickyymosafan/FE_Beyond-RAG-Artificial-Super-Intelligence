@@ -17,6 +17,7 @@ export interface SendMessageResponse {
   citations?: Citation[]
   asiScore?: number
   reasoningPath?: string[]
+  responseTimeMs?: number
   error?: string
 }
 
@@ -139,6 +140,9 @@ export async function sendChatMessage(
       content: m.content,
     }))
 
+    // Measure real execution time
+    const startTime = Date.now()
+
     // Call RAG query API
     const response = await fetch(API_ROUTES.RAG_QUERY, {
       method: "POST",
@@ -150,10 +154,13 @@ export async function sendChatMessage(
       }),
     })
 
+    const responseTimeMs = Date.now() - startTime
+
     if (!response.ok) {
       return {
         response: DEFAULT_MESSAGES.ERROR_GENERIC,
         error: `API error status: ${response.status}`,
+        responseTimeMs,
       }
     }
 
@@ -170,6 +177,7 @@ export async function sendChatMessage(
       citations: data.citations,
       asiScore: data.asiScore,
       reasoningPath: data.reasoningPath,
+      responseTimeMs,
     })
     messages[chatId] = chatMessages
     saveStorageMessages(messages)
@@ -184,6 +192,7 @@ export async function sendChatMessage(
       citations: data.citations,
       asiScore: data.asiScore,
       reasoningPath: data.reasoningPath,
+      responseTimeMs,
     }
   } catch (error) {
     logError("sendChatMessage", error)

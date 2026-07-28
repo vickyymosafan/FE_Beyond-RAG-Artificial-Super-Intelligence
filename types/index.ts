@@ -33,6 +33,7 @@ export interface Message {
   citations?: Citation[];
   asiScore?: number;
   reasoningPath?: string[];
+  responseTimeMs?: number;
 }
 
 export interface RAGQueryResponse {
@@ -42,6 +43,7 @@ export interface RAGQueryResponse {
   asiScore?: number;
   reasoningPath?: string[];
   sources?: string[];
+  responseTimeMs?: number;
   error?: string;
 }
 
