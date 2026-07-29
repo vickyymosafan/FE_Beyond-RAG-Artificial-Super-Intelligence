@@ -4,6 +4,30 @@ import { logError } from "@/lib/error-handler"
 
 export type { AdminDocument }
 
+export interface LearningLogEntry {
+  id: number
+  query: string
+  originalAnswer: string
+  improvedAnswer?: string
+  gapScore: number
+  gapsFound: string[]
+  missingKeywords: string[]
+  wasImproved: boolean
+  improvementReason?: string
+  providerUsed: string
+  originalScore: number
+  improvedScore?: number
+  createdAt: string
+}
+
+export interface LearningStats {
+  totalLogs: number
+  totalImproved: number
+  avgGapScore: number
+  improvementRate: number
+}
+
+
 function getToken(): string | null {
   if (typeof window === "undefined") return null
   try {
@@ -87,5 +111,15 @@ export const adminService = {
 
   async clearCache(): Promise<{ success: boolean; deleted: number }> {
     return api<{ success: boolean; deleted: number }>(API_ROUTES.ADMIN_CACHE_CLEAR, { method: "POST" })
+  },
+
+  async getLearningLogs(limit = 50): Promise<LearningLogEntry[]> {
+    const data = await api<{ logs: LearningLogEntry[] }>(`${API_ROUTES.ADMIN_LEARNING_LOGS}?limit=${limit}`)
+    return data.logs || []
+  },
+
+  async getLearningStats(): Promise<LearningStats> {
+    const data = await api<{ stats: LearningStats }>(API_ROUTES.ADMIN_STATS_LEARNING)
+    return data.stats
   },
 }

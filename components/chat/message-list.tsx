@@ -27,42 +27,38 @@ export function MessageList() {
   const virtualizer = useVirtualizer({
     count: messages.length,
     getScrollElement: () => parentRef.current,
-    // Estimate message height - will be measured dynamically
+    // Estimate message height - measured dynamically automatically by TanStack Virtual
     estimateSize: () => 120,
     // Render extra items above and below viewport for smooth scrolling
     overscan: 5,
-    // Enable dynamic size measurement
-    measureElement: (element) => {
-      return element.getBoundingClientRect().height
-    },
   })
 
   // Auto-scroll to bottom when new messages arrive
   React.useEffect(() => {
     if (messages.length > prevMessagesLength.current) {
-      // New message added - scroll to bottom
-      // Use requestAnimationFrame for smoother scrolling
-      requestAnimationFrame(() => {
+      const timer = setTimeout(() => {
         virtualizer.scrollToIndex(messages.length - 1, {
           align: "end",
           behavior: "smooth",
         })
-      })
+      }, 0)
+      return () => clearTimeout(timer)
     }
     prevMessagesLength.current = messages.length
-  }, [messages.length, virtualizer])
+  }, [messages.length])
 
   // Also scroll when loading state changes (AI starts responding)
   React.useEffect(() => {
     if (isLoading && messages.length > 0) {
-      requestAnimationFrame(() => {
+      const timer = setTimeout(() => {
         virtualizer.scrollToIndex(messages.length - 1, {
           align: "end",
           behavior: "smooth",
         })
-      })
+      }, 0)
+      return () => clearTimeout(timer)
     }
-  }, [isLoading, messages.length, virtualizer])
+  }, [isLoading, messages.length])
 
   const virtualItems = virtualizer.getVirtualItems()
 

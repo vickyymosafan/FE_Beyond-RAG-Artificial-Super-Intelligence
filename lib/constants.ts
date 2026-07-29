@@ -20,6 +20,8 @@ export const API_ROUTES = {
   ADMIN_CACHE_TOP: "/api/admin/cache/top",
   ADMIN_FAQ: "/api/admin/faq",
   ADMIN_CACHE_CLEAR: "/api/admin/cache/clear",
+  ADMIN_LEARNING_LOGS: "/api/admin/learning-logs",
+  ADMIN_STATS_LEARNING: "/api/admin/stats/learning",
 } as const
 
 export const UI_STRINGS = {

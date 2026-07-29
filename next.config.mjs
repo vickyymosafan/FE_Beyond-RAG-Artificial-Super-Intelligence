@@ -42,14 +42,16 @@ const nextConfig = {
     ]
   },
   async rewrites() {
+    const backendUrl = process.env.NEXT_PUBLIC_API_URL ||
+      (process.env.NODE_ENV === "development" ? "http://127.0.0.1:8787" : "https://rag-ai-agentic.mvickymosafan.workers.dev")
     return [
       {
         source: "/api/rag/:path*",
-        destination: "https://rag-ai-agentic.mvickymosafan.workers.dev/api/rag/:path*",
+        destination: `${backendUrl}/api/rag/:path*`,
       },
       {
         source: "/api/admin/:path*",
-        destination: "https://rag-ai-agentic.mvickymosafan.workers.dev/api/admin/:path*",
+        destination: `${backendUrl}/api/admin/:path*`,
       },
     ]
   },

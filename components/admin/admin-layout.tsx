@@ -20,8 +20,11 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
           <h2 className="font-semibold text-sidebar-foreground">Admin Panel</h2>
         </div>
         <nav className="flex-1 p-2 space-y-1">
-          <Button variant="secondary" className="w-full justify-start gap-2 text-sidebar-foreground font-medium" onClick={() => router.push('/vickymosafan/dashboard')}>
+          <Button variant="ghost" className="w-full justify-start gap-2 text-sidebar-foreground/70 hover:text-sidebar-foreground font-medium" onClick={() => router.push('/vickymosafan/dashboard')}>
             <LayoutDashboard className="size-4" /> Dashboard
+          </Button>
+          <Button variant="ghost" className="w-full justify-start gap-2 text-sidebar-foreground/70 hover:text-sidebar-foreground font-medium" onClick={() => router.push('/vickymosafan/asi-logs')}>
+            <FileText className="size-4" /> ASI UI/UX Logs
           </Button>
         </nav>
         <div className="p-3 border-t mt-auto space-y-2">
