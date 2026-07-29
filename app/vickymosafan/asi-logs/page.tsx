@@ -47,7 +47,7 @@ export default function AsiLogsPage() {
     <AdminLayout>
       <div className="p-6 space-y-6 max-w-7xl mx-auto">
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold">ASI UI/UX Transparency Logs</h1>
+          <h1 className="text-2xl font-bold">ASI Transparency Logs</h1>
           <div className="flex items-center gap-3">
             <span className="flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400 font-medium bg-emerald-500/10 px-3 py-1.5 rounded-full border border-emerald-500/20">
               <span className="size-2 rounded-full bg-emerald-500 animate-ping" /> Live Polling (6s)

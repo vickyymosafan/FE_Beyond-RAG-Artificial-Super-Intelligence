@@ -24,7 +24,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
             <LayoutDashboard className="size-4" /> Dashboard
           </Button>
           <Button variant="ghost" className="w-full justify-start gap-2 text-sidebar-foreground/70 hover:text-sidebar-foreground font-medium" onClick={() => router.push('/vickymosafan/asi-logs')}>
-            <FileText className="size-4" /> ASI UI/UX Logs
+            <FileText className="size-4" /> ASI Logs
           </Button>
         </nav>
         <div className="p-3 border-t mt-auto space-y-2">

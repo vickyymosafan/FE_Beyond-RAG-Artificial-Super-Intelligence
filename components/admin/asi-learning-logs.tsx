@@ -16,7 +16,7 @@ export function AsiLearningLogs({
   const [selectedLog, setSelectedLog] = useState<LearningLogEntry | null>(null);
 
   if (loading) {
-    return <div className="h-40 flex items-center justify-center text-muted-foreground animate-pulse">Memuat log UI/UX ASI...</div>;
+    return <div className="h-40 flex items-center justify-center text-muted-foreground animate-pulse">Memuat log ASI...</div>;
   }
 
   if (!logs.length) {
