@@ -6,9 +6,8 @@ const withBundleAnalyzer = bundleAnalyzer({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  typescript: {
-    ignoreBuildErrors: true,
-  },
+  // [FE-SEC-1 FIX] Removed ignoreBuildErrors — TypeScript errors now correctly fail production builds.
+  // This ensures type safety is enforced and regressions are caught at build time.
   images: {
     formats: ["image/avif", "image/webp"],
   },
