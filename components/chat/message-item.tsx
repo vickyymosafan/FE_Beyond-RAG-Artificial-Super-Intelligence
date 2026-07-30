@@ -203,17 +203,26 @@ const DefaultAssistantContent = ({
       </div>
 
       {/* Expanded Reasoning Path Steps */}
+      {/* ─── DEEPSEEK-R1 STYLE ACCORDION REASONING TRAIL ────────────────────── */}
       {showReasoning && reasoningPath && (
-        <div className="bg-muted/40 border rounded-xl p-3 text-xs space-y-1.5 font-mono text-muted-foreground animate-in fade-in duration-200">
-          <div className="font-semibold text-foreground text-[11px] uppercase tracking-wider pb-1 border-b">
-            Reasoning Artificial Super Intelligents
+        <div className="bg-slate-950/80 border border-cyan-500/30 shadow-[0_0_20px_rgba(6,182,212,0.12)] rounded-xl p-3.5 text-xs space-y-2 font-mono text-cyan-200/90 animate-in fade-in slide-in-from-top-2 duration-300 backdrop-blur-md">
+          <div className="flex items-center justify-between font-bold text-cyan-400 text-[11px] uppercase tracking-wider pb-2 border-b border-cyan-900/40">
+            <span className="flex items-center gap-1.5">
+              <Sparkles className="size-3.5 text-cyan-400 animate-pulse" />
+              ⚡ ASI Superpowers Reasoning Trail
+            </span>
+            <span className="text-[10px] text-purple-300 bg-purple-950/60 px-2 py-0.5 rounded border border-purple-800/40 font-normal">
+              DeepSeek-R1 Mode
+            </span>
           </div>
-          {reasoningPath.map((step, idx) => (
-            <div key={idx} className="flex items-start gap-2 min-w-0">
-              <span className="text-primary font-bold shrink-0">{idx + 1}.</span>
-              <span className="break-words min-w-0 leading-relaxed">{step}</span>
-            </div>
-          ))}
+          <div className="space-y-1.5 pt-1">
+            {reasoningPath.map((step, idx) => (
+              <div key={idx} className="flex items-start gap-2 min-w-0">
+                <span className="text-cyan-400 font-bold shrink-0">{idx + 1}.</span>
+                <span className="break-words min-w-0 leading-relaxed text-slate-300">{step}</span>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>

@@ -16,24 +16,24 @@ import type { ThinkingPhase, ThinkingState } from "@/types/segregated-props"
 
 const PHASE_MESSAGES: Record<ThinkingPhase, string[]> = {
   analyzing: [
-    "Menganalisis pertanyaan Anda...",
-    "Memahami konteks pertanyaan...",
-    "Mengidentifikasi kata kunci...",
+    "🧠 Klasifikasi Intent: Pertanyaan Akademik (Panduan TA SI 2026)...",
+    "🔍 Menganalisis variasi kata kunci semantik & ekspansi kueri...",
+    "⚡ Memeriksa L1 Exact & L2 Semantic KV Cache (< 50ms)...",
   ],
   searching: [
-    "Mencari informasi di database...",
-    "Menelusuri dokumen relevan...",
-    "Mengumpulkan data terkait...",
+    "🗄️ Hybrid Search: pgvector 768d + BM25 Full-Text Search di Neon DB...",
+    "📄 Menelusuri 10 potongan dokumen terkuat dari Halaman 1-74...",
+    "🧩 Context Fusion: Contiguous Window Expansion (Tabel & Sistematika)...",
   ],
   comparing: [
-    "Membandingkan informasi...",
-    "Memverifikasi keakuratan data...",
-    "Menyusun perbandingan...",
+    "🛡️ Memverifikasi Fact-Hash & Grounding Score (Zero-Hallucination)...",
+    "⚖️ Multi-Provider Cascade: Gemini 2.5 Flash ➔ Groq Llama 3.3...",
+    "📊 Menilai kepadatan informasi & memotong kalimat redundant...",
   ],
   generating: [
-    "Menyusun jawaban...",
-    "Memformat response...",
-    "Hampir selesai...",
+    "⚡ Menyusun format Markdown terstruktur & Tabel 4-Kolom...",
+    "🐝 Menyalahkan Matriks 4 Subagent Swarm (2A+2B+2C+2D) di background...",
+    "✨ Hampir selesai, memvalidasi presisi sitasi halaman...",
   ],
 }
 
