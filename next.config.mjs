@@ -42,7 +42,8 @@ const nextConfig = {
   },
   async rewrites() {
     const backendUrl = process.env.NEXT_PUBLIC_API_URL ||
-      (process.env.NODE_ENV === "development" ? "http://127.0.0.1:8787" : "https://rag-ai-agentic.mvickymosafan.workers.dev")
+      process.env.NEXT_PUBLIC_API_BASE_URL ||
+      "https://rag-ai-agentic.mvickymosafan.workers.dev"
     return [
       {
         source: "/api/rag/:path*",
