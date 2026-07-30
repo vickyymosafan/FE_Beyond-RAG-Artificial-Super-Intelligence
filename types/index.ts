@@ -42,7 +42,7 @@ export interface RAGQueryResponse {
   confidence?: number;
   asiScore?: number;
   reasoningPath?: string[];
-  sources?: string[];
+  sources?: { docId: string; page: number; chunkId: string }[];
   responseTimeMs?: number;
   error?: string;
 }

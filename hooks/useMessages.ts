@@ -20,6 +20,10 @@ import { useThinkingIndicator } from "./useThinkingIndicator"
 import {
   getMessages as apiGetMessages,
   sendChatMessage as apiSendMessage,
+  getStorageMessages,
+  saveStorageMessages,
+  getStorageChats,
+  saveStorageChats,
 } from "@/lib/api/chat-service"
 
 const defaultMessageApi: Pick<ChatApiAdapter, 'getMessages' | 'sendMessage'> = {
@@ -196,6 +200,23 @@ export function useMessages(options: UseMessagesOptions): MessageActions {
                   responseTimeMs: Date.now() - startTime,
                 }
                 setMessages((prev) => [...prev, assistantMessage])
+
+                // Persist SSE stream messages to localStorage
+                try {
+                  const storedMessages = getStorageMessages()
+                  const chatMsgs = storedMessages[chatId!] || []
+                  chatMsgs.push(assistantMessage)
+                  storedMessages[chatId!] = chatMsgs
+                  saveStorageMessages(storedMessages)
+
+                  const chats = getStorageChats()
+                  if (chats[chatId!]) {
+                    chats[chatId!].updatedAt = nowISO()
+                    saveStorageChats(chats)
+                  }
+                } catch {
+                  // Ignore local storage quota errors
+                }
                 break
               }
 

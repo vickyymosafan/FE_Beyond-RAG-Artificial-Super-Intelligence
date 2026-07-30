@@ -14,10 +14,11 @@ import * as React from "react"
 import dynamic from "next/dynamic"
 import { cn } from "@/lib/utils"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { User, Zap, Copy, Check } from "lucide-react"
+import { User, Zap, Copy, Check, ShieldCheck, ChevronDown, ChevronUp, ThumbsUp, ThumbsDown, BookOpen, Sparkles } from "lucide-react"
 import Image from "next/image"
+import type { Citation } from "@/types"
 import type { MessageItemProps } from "@/types/segregated-props"
-import { UI_STRINGS, LIMITS } from "@/lib/constants"
+import { UI_STRINGS, LIMITS, API_ROUTES } from "@/lib/constants"
 
 // Lazy load MarkdownRenderer (~100KB react-markdown bundle)
 const MarkdownRenderer = dynamic(
@@ -67,14 +68,21 @@ const DefaultUserContent = ({ content }: { content: string }) => (
 
 const DefaultAssistantContent = ({ 
   content, 
+  citations,
+  asiScore,
   reasoningPath,
   responseTimeMs,
 }: { 
   content: string
+  citations?: Citation[]
+  asiScore?: number
   reasoningPath?: string[] 
   responseTimeMs?: number
 }) => {
   const [copied, setCopied] = React.useState(false)
+  const [showReasoning, setShowReasoning] = React.useState(false)
+  const [feedback, setFeedback] = React.useState<'up' | 'down' | null>(null)
+
   const isCacheHit = reasoningPath?.some((r) => r.toLowerCase().includes(UI_STRINGS.CACHE_HIT_CHECK))
 
   const durationLabel = responseTimeMs
@@ -87,8 +95,21 @@ const DefaultAssistantContent = ({
     setTimeout(() => setCopied(false), 2000)
   }
 
+  const handleFeedback = async (rating: 'up' | 'down') => {
+    setFeedback(rating)
+    try {
+      await fetch(API_ROUTES.RAG_FEEDBACK, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: content.slice(0, 100), userId: 'user-feedback', rating }),
+      })
+    } catch {
+      // Ignore feedback network errors
+    }
+  }
+
   return (
-    <div className="space-y-1.5 group relative">
+    <div className="space-y-2 group relative">
       <div className="rounded-2xl rounded-tl-sm bg-muted px-3 py-2 sm:px-4 sm:py-3 relative">
         <MarkdownRenderer content={content} />
         
@@ -103,14 +124,96 @@ const DefaultAssistantContent = ({
         </button>
       </div>
 
-      <div className="flex items-center gap-2">
-        {isCacheHit && (
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-mono font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 shadow-sm animate-in fade-in slide-in-from-top-1 duration-300">
-            <Zap className="size-3 text-emerald-500 fill-emerald-500/30 animate-pulse" />
-            <span>{UI_STRINGS.CACHE_HIT_LABEL} ({durationLabel})</span>
+      {/* ─── CITATIONS & MERKLE FACT HASH BADGES ──────────────────────────── */}
+      {citations && citations.length > 0 && (
+        <div className="bg-card border rounded-xl p-3 space-y-2 text-xs">
+          <div className="flex items-center gap-1.5 font-semibold text-primary text-[11px] uppercase tracking-wider">
+            <BookOpen className="size-3.5" /> Sumber Rujukan Resmi PDF
           </div>
-        )}
+          <div className="flex flex-wrap gap-2">
+            {citations.map((c, i) => (
+              <div key={i} className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-muted/60 border text-[11px]">
+                <span className="font-medium text-foreground">{c.docName}</span>
+                <span className="text-muted-foreground">Hal {c.page}</span>
+                {c.docName.includes('FactHash') && (
+                  <span className="flex items-center gap-1 text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/30">
+                    <ShieldCheck className="size-3" /> SHA-256 Verified
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ─── METADATA BADGES & REASONING PATH ACCORDION ────────────────────── */}
+      <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
+        <div className="flex flex-wrap items-center gap-2 text-xs">
+          {/* Cache Hit Badge */}
+          {isCacheHit ? (
+            <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
+              <Zap className="size-3 fill-emerald-500/30" />
+              <span>{UI_STRINGS.CACHE_HIT_LABEL} ({durationLabel})</span>
+            </div>
+          ) : (
+            <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-mono text-muted-foreground border">
+              <span>Respon: {durationLabel}</span>
+            </div>
+          )}
+
+          {/* ASI Score Meter Badge */}
+          {asiScore !== undefined && (
+            <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30">
+              <Sparkles className="size-3" />
+              <span>ASI Score: {(asiScore * 100).toFixed(0)}%</span>
+            </div>
+          )}
+
+          {/* Collapsible Reasoning Path Trigger */}
+          {reasoningPath && reasoningPath.length > 0 && (
+            <button
+              onClick={() => setShowReasoning(!showReasoning)}
+              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+            >
+              <span>Langkah Reasoning ({reasoningPath.length})</span>
+              {showReasoning ? <ChevronUp className="size-3" /> : <ChevronDown className="size-3" />}
+            </button>
+          )}
+        </div>
+
+        {/* Feedback Action Buttons */}
+        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          <button
+            onClick={() => handleFeedback('up')}
+            className={`p-1 rounded hover:bg-muted text-xs ${feedback === 'up' ? 'text-emerald-500 font-bold' : 'text-muted-foreground'}`}
+            title="Jawaban Sangat Membantu"
+          >
+            <ThumbsUp className="size-3.5" />
+          </button>
+          <button
+            onClick={() => handleFeedback('down')}
+            className={`p-1 rounded hover:bg-muted text-xs ${feedback === 'down' ? 'text-rose-500 font-bold' : 'text-muted-foreground'}`}
+            title="Jawaban Kurang Tepat"
+          >
+            <ThumbsDown className="size-3.5" />
+          </button>
+        </div>
       </div>
+
+      {/* Expanded Reasoning Path Steps */}
+      {showReasoning && reasoningPath && (
+        <div className="bg-muted/40 border rounded-xl p-3 text-xs space-y-1 font-mono text-muted-foreground animate-in fade-in duration-200">
+          <div className="font-semibold text-foreground text-[11px] uppercase tracking-wider pb-1 border-b">
+            Reasoning Artificial Super Intelligents
+          </div>
+          {reasoningPath.map((step, idx) => (
+            <div key={idx} className="flex items-start gap-2">
+              <span className="text-primary font-bold">{idx + 1}.</span>
+              <span>{step}</span>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
@@ -141,7 +244,13 @@ export const MessageItem = React.memo(function MessageItem({
     ? renderContent(message.content, message.role as 'user' | 'assistant')
     : (isUser 
         ? <DefaultUserContent content={message.content} />
-        : <DefaultAssistantContent content={message.content} reasoningPath={message.reasoningPath} responseTimeMs={message.responseTimeMs} />
+        : <DefaultAssistantContent 
+            content={message.content} 
+            citations={message.citations}
+            asiScore={message.asiScore}
+            reasoningPath={message.reasoningPath} 
+            responseTimeMs={message.responseTimeMs} 
+          />
       )
 
   return (

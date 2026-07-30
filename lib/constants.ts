@@ -12,6 +12,7 @@ export const STORAGE_KEYS = {
 
 export const API_ROUTES = {
   RAG_QUERY: "/api/rag/query",
+  RAG_STREAM: "/api/rag/stream",
   RAG_FEEDBACK: "/api/rag/feedback",
   ADMIN_LOGIN: "/api/admin/login",
   ADMIN_DOCUMENTS: "/api/admin/documents",

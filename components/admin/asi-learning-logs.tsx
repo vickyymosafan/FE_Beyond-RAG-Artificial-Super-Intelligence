@@ -53,14 +53,14 @@ export function AsiLearningLogs({
               <Activity className="size-4" /> Self-Improving
             </span>
             <span className="text-[10px] bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 font-mono px-2 py-0.5 rounded-full font-bold">
-              AUTO-RRF TUNED
+              BEYOND-RRF D-RRF
             </span>
           </div>
           <div className="text-2xl font-black text-emerald-600 dark:text-emerald-400">
             {stats ? (stats.improvementRate * 100).toFixed(1) : '100'}% <span className="text-sm font-normal text-muted-foreground">presisi</span>
           </div>
           <p className="text-xs text-muted-foreground leading-relaxed">
-            Auto-tuning rasio bobot RRF Vector/BM25 &amp; prompt versi secara dinamis.
+            Dynamic Quad-Fusion Engine: Sigmoid scaling σ(S) &amp; adaptive 4-channel retrieval.
           </p>
         </div>
 
@@ -78,7 +78,7 @@ export function AsiLearningLogs({
             &lt; 150ms <span className="text-sm font-normal text-muted-foreground">latensi cache hit</span>
           </div>
           <p className="text-xs text-muted-foreground leading-relaxed">
-            Invaldisi KV Cache &amp; update Knowledge Graph otomatis per revisi hash.
+            Invalidasi KV Cache &amp; update Knowledge Graph (Neon DB) otomatis per revisi hash.
           </p>
         </div>
 
@@ -96,7 +96,7 @@ export function AsiLearningLogs({
             <ShieldCheck className="size-6 text-amber-500" /> 100% <span className="text-sm font-normal text-muted-foreground">zero-hallucination</span>
           </div>
           <p className="text-xs text-muted-foreground leading-relaxed">
-            Context7 SDK sentinel + Epistemic Firewall terikat presisi ke Neon DB.
+            Epistemic Multi-Layer Firewall + Merkle SHA-256 Fact Hash Proof &amp; Parent-Child Tree Indexing.
           </p>
         </div>
       </div>
@@ -106,7 +106,7 @@ export function AsiLearningLogs({
         <div className="rounded-xl border bg-card p-4 flex flex-wrap items-center justify-between gap-4 text-xs">
           <div className="flex items-center gap-2 font-medium">
             <GitBranch className="size-4 text-primary" />
-            <span>Versi Engine: <strong className="font-mono">ASI-v4.0.0-Superpowers</strong></span>
+            <span>Versi Engine: <strong className="font-mono">ASI-v4.0.0-Beyond-RRF</strong></span>
           </div>
           <div className="flex items-center gap-6 text-muted-foreground font-mono">
             <div>Total Analisis: <span className="font-bold text-foreground">{stats.totalLogs}</span></div>

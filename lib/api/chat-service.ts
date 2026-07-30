@@ -43,10 +43,10 @@ function saveStorageData<T>(key: string, data: T): void {
   }
 }
 
-const getStorageChats = (): Record<string, ChatHistory> => getStorageData(STORAGE_KEYS.HISTORIES)
-const getStorageMessages = (): Record<string, Message[]> => getStorageData(STORAGE_KEYS.MESSAGES)
-const saveStorageChats = (chats: Record<string, ChatHistory>): void => saveStorageData(STORAGE_KEYS.HISTORIES, chats)
-const saveStorageMessages = (messages: Record<string, Message[]>): void => saveStorageData(STORAGE_KEYS.MESSAGES, messages)
+export const getStorageChats = (): Record<string, ChatHistory> => getStorageData(STORAGE_KEYS.HISTORIES)
+export const getStorageMessages = (): Record<string, Message[]> => getStorageData(STORAGE_KEYS.MESSAGES)
+export const saveStorageChats = (chats: Record<string, ChatHistory>): void => saveStorageData(STORAGE_KEYS.HISTORIES, chats)
+export const saveStorageMessages = (messages: Record<string, Message[]>): void => saveStorageData(STORAGE_KEYS.MESSAGES, messages)
 
 /**
  * Create a new chat session
