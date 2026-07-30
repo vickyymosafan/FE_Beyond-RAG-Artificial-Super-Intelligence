@@ -1,6 +1,19 @@
 # 💬 Smart Agentic AI Chat - Frontend Application
 
+![License: PolyForm Noncommercial](https://img.shields.io/badge/License-PolyForm_Noncommercial-blue.svg)
+![Architecture: Public Showcase](https://img.shields.io/badge/Architecture-Public_Showcase_%2F_Protected_Core-orange.svg)
+![Mode: Mock Enabled](https://img.shields.io/badge/Dev_Mode-Mock_Support-green.svg)
+
 Aplikasi antarmuka web modern berbasis **Next.js** dan **React** yang dirancang sebagai sarana interaksi cerdas, cepat, dan intuitif antara pengguna dengan sistem kecerdasan buatan **Agentic RAG AI**.
+
+---
+
+> [!NOTE]
+> **💡 Information for Recruiters & Hiring Managers**
+> 
+> Repositori antarmuka ini dipublikasikan secara terbuka untuk demonstrasi kemampuan *Frontend Architecture*, *Design System*, dan *Integration Quality*.
+> - **Local Development**: Menjalankan `npm run dev` pada lingkungan lokal terhubung ke **Mock Engine Mode** dengan *synthetic streaming data* untuk menguji responsivitas UI tanpa memerlukan setup kredensial LLM/API Key asli.
+> - **Production Live Demo**: Versi terpasang secara *live* terhubung ke Cloudflare Workers Edge API resmi milik pemilik project.
 
 ---
 
@@ -41,3 +54,9 @@ Aplikasi dibangun dengan memprioritaskan kenyamanan pengguna (*User Experience*)
 - **Styling & Components**: TailwindCSS & Shadcn UI
 - **State & Virtualization**: TanStack Virtual
 - **Icons & Typography**: Lucide Icons & Google Fonts
+
+---
+
+## ⚖️ License
+
+Aplikasi frontend ini dilindungi di bawah **[PolyForm Noncommercial License 1.0](LICENSE)**.
