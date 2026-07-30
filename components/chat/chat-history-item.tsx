@@ -101,7 +101,7 @@ export function ChatHistoryItem({
   // Render content (OCP - customizable)
   const content = renderContent ? renderContent(chat) : (
     <span className={cn(
-      "flex-1 line-clamp-2 wrap-break-word leading-tight",
+      "flex-1 line-clamp-2 break-words leading-tight",
       getTitleSizeClass(chat.title)
     )}>
       {chat.title}

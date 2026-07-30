@@ -27,7 +27,7 @@ export function AsiLearningLogs({
   return (
     <div className="space-y-8">
       {/* ─── SUPER-HUMAN INTELLIGENCE DASHBOARD BADGES ───────────────────────── */}
-      <div className="grid gap-4 md:grid-cols-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* 1. Self-Learning Card */}
         <div className="rounded-xl border bg-gradient-to-br from-purple-500/10 via-card to-card p-5 relative overflow-hidden flex flex-col gap-2">
           <div className="flex items-center justify-between">
@@ -85,15 +85,15 @@ export function AsiLearningLogs({
         {/* 4. Self-Upgrading & Super-Human Card */}
         <div className="rounded-xl border bg-gradient-to-br from-amber-500/10 via-card to-card p-5 relative overflow-hidden flex flex-col gap-2">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
+            <span className="text-xs font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-400 flex items-center gap-1.5">
               <Sparkles className="size-4" /> Self-Upgrading
             </span>
-            <span className="text-[10px] bg-amber-500/20 text-amber-700 dark:text-amber-300 font-mono px-2 py-0.5 rounded-full font-bold">
+            <span className="text-[10px] bg-amber-500/20 text-amber-800 dark:text-amber-300 font-mono px-2 py-0.5 rounded-full font-bold">
               SUPER-HUMAN
             </span>
           </div>
-          <div className="text-2xl font-black text-amber-600 dark:text-amber-400 flex items-center gap-1">
-            <ShieldCheck className="size-6 text-amber-500" /> 100% <span className="text-sm font-normal text-muted-foreground">zero-hallucination</span>
+          <div className="text-2xl font-black text-amber-700 dark:text-amber-400 flex items-center gap-1">
+            <ShieldCheck className="size-6 text-amber-600 dark:text-amber-400" /> 100% <span className="text-sm font-normal text-muted-foreground">zero-hallucination</span>
           </div>
           <p className="text-xs text-muted-foreground leading-relaxed">
             Epistemic Multi-Layer Firewall + Merkle SHA-256 Fact Hash Proof &amp; Parent-Child Tree Indexing.

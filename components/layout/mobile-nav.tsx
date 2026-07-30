@@ -122,7 +122,7 @@ export function MobileNav({ onOpenAbout }: MobileNavProps) {
                         >
                           <MessageSquare className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0 opacity-70" />
                           <span className={cn(
-                            "flex-1 line-clamp-2 wrap-break-word leading-tight",
+                            "flex-1 line-clamp-2 break-words leading-tight",
                             getTitleSizeClass(chat.title)
                           )}>
                             {chat.title}

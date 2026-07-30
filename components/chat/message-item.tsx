@@ -61,8 +61,8 @@ const DefaultAssistantAvatar = () => (
 // ============================================
 
 const DefaultUserContent = ({ content }: { content: string }) => (
-  <div className="rounded-2xl rounded-tr-sm bg-primary text-primary-foreground px-3 py-2 sm:px-4 sm:py-2.5">
-    <p className="text-xs sm:text-sm whitespace-pre-wrap wrap-break-word">{content}</p>
+  <div className="rounded-2xl rounded-tr-sm bg-primary text-primary-foreground px-3.5 py-2.5 sm:px-4 sm:py-3 shadow-xs">
+    <p className="text-xs sm:text-sm whitespace-pre-wrap break-words">{content}</p>
   </div>
 )
 
@@ -110,14 +110,14 @@ const DefaultAssistantContent = ({
 
   return (
     <div className="space-y-2 group relative">
-      <div className="rounded-2xl rounded-tl-sm bg-muted px-3 py-2 sm:px-4 sm:py-3 relative">
+      <div className="rounded-2xl rounded-tl-sm bg-muted px-3.5 py-2.5 sm:px-4 sm:py-3 relative shadow-xs">
         <MarkdownRenderer content={content} />
         
-        {/* Superpowers One-Click Copy to Word / Clipboard Button */}
+        {/* Superpowers Copy to Word Button - Touch Friendly & Always visible on mobile */}
         <button
           onClick={handleCopy}
           title="Salin jawaban untuk MS Word"
-          className="absolute top-2 right-2 p-1.5 rounded-lg bg-background/80 hover:bg-background border border-border text-muted-foreground hover:text-foreground opacity-0 group-hover:opacity-100 transition-opacity text-xs flex items-center gap-1 shadow-sm"
+          className="absolute top-2 right-2 p-1.5 sm:p-1.5 min-h-[32px] rounded-lg bg-background/90 hover:bg-background border border-border text-muted-foreground hover:text-foreground opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity text-xs flex items-center gap-1 shadow-xs touch-manipulation"
         >
           {copied ? <Check className="size-3.5 text-emerald-500" /> : <Copy className="size-3.5" />}
           <span className="text-[10px] font-medium hidden sm:inline">{copied ? "Tersalin!" : "Salin ke Word"}</span>
@@ -126,17 +126,19 @@ const DefaultAssistantContent = ({
 
       {/* ─── CITATIONS & MERKLE FACT HASH BADGES ──────────────────────────── */}
       {citations && citations.length > 0 && (
-        <div className="bg-card border rounded-xl p-3 space-y-2 text-xs">
-          <div className="flex items-center gap-1.5 font-semibold text-primary text-[11px] uppercase tracking-wider">
+        <div className="bg-card border rounded-xl p-2.5 sm:p-3 space-y-2 text-xs shadow-xs">
+          <div className="flex items-center gap-1.5 font-semibold text-primary text-[10px] sm:text-[11px] uppercase tracking-wider">
             <BookOpen className="size-3.5" /> Sumber Rujukan Resmi PDF
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5 sm:gap-2">
             {citations.map((c, i) => (
-              <div key={i} className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-muted/60 border text-[11px]">
-                <span className="font-medium text-foreground">{c.docName}</span>
-                <span className="text-muted-foreground">Hal {c.page}</span>
+              <div key={i} className="flex flex-wrap items-center gap-1.5 px-2.5 py-1 rounded-lg bg-muted/60 border text-[11px] max-w-full">
+                <span className="font-medium text-foreground truncate max-w-[140px] sm:max-w-[240px]" title={c.docName}>
+                  {c.docName.replace(/\s*\[Verified Fact Hash:.*\]/, '')}
+                </span>
+                <span className="text-muted-foreground shrink-0">Hal {c.page}</span>
                 {c.docName.includes('FactHash') && (
-                  <span className="flex items-center gap-1 text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/30">
+                  <span className="flex items-center gap-1 text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/30 shrink-0">
                     <ShieldCheck className="size-3" /> SHA-256 Verified
                   </span>
                 )}
@@ -148,22 +150,22 @@ const DefaultAssistantContent = ({
 
       {/* ─── METADATA BADGES & REASONING PATH ACCORDION ────────────────────── */}
       <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
-        <div className="flex flex-wrap items-center gap-2 text-xs">
+        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs">
           {/* Cache Hit Badge */}
           {isCacheHit ? (
-            <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
+            <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-mono font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
               <Zap className="size-3 fill-emerald-500/30" />
               <span>{UI_STRINGS.CACHE_HIT_LABEL} ({durationLabel})</span>
             </div>
           ) : (
-            <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-mono text-muted-foreground border">
+            <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-mono text-muted-foreground border">
               <span>Respon: {durationLabel}</span>
             </div>
           )}
 
           {/* ASI Score Meter Badge */}
           {asiScore !== undefined && (
-            <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30">
+            <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-mono font-bold bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/30">
               <Sparkles className="size-3" />
               <span>ASI Score: {(asiScore * 100).toFixed(0)}%</span>
             </div>
@@ -173,7 +175,7 @@ const DefaultAssistantContent = ({
           {reasoningPath && reasoningPath.length > 0 && (
             <button
               onClick={() => setShowReasoning(!showReasoning)}
-              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+              className="inline-flex items-center gap-1 px-2.5 py-1 min-h-[32px] rounded-md text-[11px] font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors touch-manipulation"
             >
               <span>Langkah Reasoning ({reasoningPath.length})</span>
               {showReasoning ? <ChevronUp className="size-3" /> : <ChevronDown className="size-3" />}
@@ -181,18 +183,18 @@ const DefaultAssistantContent = ({
           )}
         </div>
 
-        {/* Feedback Action Buttons */}
-        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+        {/* Feedback Action Buttons - Visible on touch devices */}
+        <div className="flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
           <button
             onClick={() => handleFeedback('up')}
-            className={`p-1 rounded hover:bg-muted text-xs ${feedback === 'up' ? 'text-emerald-500 font-bold' : 'text-muted-foreground'}`}
+            className={`p-1.5 min-h-[32px] min-w-[32px] rounded hover:bg-muted text-xs flex items-center justify-center touch-manipulation ${feedback === 'up' ? 'text-emerald-500 font-bold' : 'text-muted-foreground'}`}
             title="Jawaban Sangat Membantu"
           >
             <ThumbsUp className="size-3.5" />
           </button>
           <button
             onClick={() => handleFeedback('down')}
-            className={`p-1 rounded hover:bg-muted text-xs ${feedback === 'down' ? 'text-rose-500 font-bold' : 'text-muted-foreground'}`}
+            className={`p-1.5 min-h-[32px] min-w-[32px] rounded hover:bg-muted text-xs flex items-center justify-center touch-manipulation ${feedback === 'down' ? 'text-rose-500 font-bold' : 'text-muted-foreground'}`}
             title="Jawaban Kurang Tepat"
           >
             <ThumbsDown className="size-3.5" />
@@ -202,14 +204,14 @@ const DefaultAssistantContent = ({
 
       {/* Expanded Reasoning Path Steps */}
       {showReasoning && reasoningPath && (
-        <div className="bg-muted/40 border rounded-xl p-3 text-xs space-y-1 font-mono text-muted-foreground animate-in fade-in duration-200">
+        <div className="bg-muted/40 border rounded-xl p-3 text-xs space-y-1.5 font-mono text-muted-foreground animate-in fade-in duration-200">
           <div className="font-semibold text-foreground text-[11px] uppercase tracking-wider pb-1 border-b">
             Reasoning Artificial Super Intelligents
           </div>
           {reasoningPath.map((step, idx) => (
-            <div key={idx} className="flex items-start gap-2">
-              <span className="text-primary font-bold">{idx + 1}.</span>
-              <span>{step}</span>
+            <div key={idx} className="flex items-start gap-2 min-w-0">
+              <span className="text-primary font-bold shrink-0">{idx + 1}.</span>
+              <span className="break-words min-w-0 leading-relaxed">{step}</span>
             </div>
           ))}
         </div>

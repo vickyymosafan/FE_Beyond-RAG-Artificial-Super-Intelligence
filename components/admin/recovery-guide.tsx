@@ -52,10 +52,10 @@ export function RecoveryGuide() {
       </div>
 
       {/* 3 Steps Container */}
-      <div className="grid gap-3 sm:grid-cols-3">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 sm:gap-4">
         {/* Step 1 */}
-        <div className="p-4 rounded-lg border bg-card/80 space-y-3 flex flex-col justify-between">
-          <div className="space-y-2">
+        <div className="p-3.5 sm:p-4 rounded-xl border bg-card text-card-foreground shadow-2xs space-y-3 flex flex-col justify-between">
+          <div className="space-y-1.5">
             <div className="flex items-center gap-2 text-sm font-semibold text-emerald-600 dark:text-emerald-400">
               <Key className="size-4 shrink-0" />
               <span>1. Buat API Key Baru</span>
@@ -67,16 +67,16 @@ export function RecoveryGuide() {
           <Button
             size="sm"
             variant="outline"
-            className="w-full gap-1.5 text-xs h-8 mt-2"
+            className="w-full gap-1.5 text-xs h-9 sm:h-8 mt-2 touch-manipulation truncate min-w-0"
             onClick={() => window.open('https://aistudio.google.com/app/apikey', '_blank')}
           >
-            Google AI Studio <ExternalLink className="size-3.5" />
+            <span className="truncate">Google AI Studio</span> <ExternalLink className="size-3.5 shrink-0" />
           </Button>
         </div>
 
         {/* Step 2 */}
-        <div className="p-4 rounded-lg border bg-card/80 space-y-3 flex flex-col justify-between">
-          <div className="space-y-2">
+        <div className="p-3.5 sm:p-4 rounded-xl border bg-card text-card-foreground shadow-2xs space-y-3 flex flex-col justify-between">
+          <div className="space-y-1.5">
             <div className="flex items-center gap-2 text-sm font-semibold text-blue-600 dark:text-blue-400">
               <Terminal className="size-4 shrink-0" />
               <span>2. Update Secret Cloudflare</span>
@@ -85,22 +85,23 @@ export function RecoveryGuide() {
               Jalankan perintah ini pada terminal folder <code className="bg-muted px-1 py-0.5 rounded text-[11px]">backend</code>:
             </p>
           </div>
-          <div className="flex items-center gap-1.5 bg-zinc-950 text-zinc-100 p-2 rounded-md font-mono text-[11px] justify-between border border-zinc-800">
-            <span className="truncate">{command}</span>
+          <div className="flex items-center gap-1.5 bg-muted/80 text-foreground p-2 rounded-lg font-mono text-[11px] justify-between border border-border min-w-0">
+            <span className="truncate min-w-0 font-medium">{command}</span>
             <Button
               size="icon"
               variant="ghost"
-              className="h-6 w-6 shrink-0 text-zinc-400 hover:text-white hover:bg-zinc-800"
+              className="h-7 w-7 shrink-0 text-muted-foreground hover:text-foreground hover:bg-muted touch-manipulation"
               onClick={handleCopy}
+              title="Salin perintah"
             >
-              {copied ? <Check className="size-3 text-emerald-400" /> : <Copy className="size-3" />}
+              {copied ? <Check className="size-3.5 text-emerald-500" /> : <Copy className="size-3.5" />}
             </Button>
           </div>
         </div>
 
         {/* Step 3 */}
-        <div className="p-4 rounded-lg border bg-card/80 space-y-3 flex flex-col justify-between">
-          <div className="space-y-2">
+        <div className="p-3.5 sm:p-4 rounded-xl border bg-card text-card-foreground shadow-2xs space-y-3 flex flex-col justify-between">
+          <div className="space-y-1.5">
             <div className="flex items-center gap-2 text-sm font-semibold text-rose-600 dark:text-rose-400">
               <Trash2 className="size-4 shrink-0" />
               <span>3. Bersihkan KV Cache</span>
@@ -113,19 +114,19 @@ export function RecoveryGuide() {
             <Button
               size="sm"
               variant="default"
-              className="w-full gap-1.5 text-xs h-8 bg-rose-600 hover:bg-rose-700 text-white"
+              className="w-full gap-1.5 text-xs h-9 sm:h-8 bg-rose-600 hover:bg-rose-700 dark:bg-rose-700 dark:hover:bg-rose-600 text-white font-medium touch-manipulation truncate min-w-0"
               onClick={handleClearCache}
               disabled={clearing}
             >
               {clearing ? (
-                <RefreshCw className="size-3.5 animate-spin" />
+                <RefreshCw className="size-3.5 animate-spin shrink-0" />
               ) : (
-                <Trash2 className="size-3.5" />
+                <Trash2 className="size-3.5 shrink-0" />
               )}
-              Bersihkan Cache Sekarang
+              <span className="truncate">Bersihkan Cache Sekarang</span>
             </Button>
             {clearMessage && (
-              <div className={`text-[11px] p-1.5 rounded font-medium text-center ${clearMessage.startsWith('✓') ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20'}`}>
+              <div className={`text-[11px] p-1.5 rounded-lg font-medium text-center ${clearMessage.startsWith('✓') ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20'}`}>
                 {clearMessage}
               </div>
             )}

@@ -151,7 +151,7 @@ export function ChatInput() {
               placeholder={
                 isListening ? "Sedang mendengarkan..." : "Tanyakan sesuatu..."
               }
-              className="min-h-[44px] sm:min-h-[52px] max-h-[150px] sm:max-h-[200px] resize-none pr-20 sm:pr-24 py-2.5 sm:py-3 text-sm sm:text-base rounded-2xl bg-muted/50 border-0 focus-visible:ring-1 focus-visible:ring-ring touch-manipulation"
+              className="min-h-[48px] sm:min-h-[52px] max-h-[150px] sm:max-h-[200px] resize-none pr-20 sm:pr-24 py-3 text-base sm:text-sm rounded-2xl bg-muted/50 border-0 focus-visible:ring-1 focus-visible:ring-ring touch-manipulation"
               disabled={isLoading}
               rows={1}
               // Improve mobile input performance
@@ -159,7 +159,7 @@ export function ChatInput() {
               autoCorrect="off"
               spellCheck={false}
             />
-            <div className="absolute right-2 bottom-1.5 sm:bottom-2 flex items-center gap-1">
+            <div className="absolute right-2 bottom-2 flex items-center gap-1">
               <VoiceButton
                 isListening={isListening}
                 isSupported={isSupported}
@@ -171,9 +171,9 @@ export function ChatInput() {
                 type="submit"
                 size="icon"
                 disabled={!input.trim() || isLoading}
-                className="h-7 w-7 sm:h-8 sm:w-8 rounded-full touch-manipulation"
+                className="h-8 w-8 sm:h-9 sm:w-9 rounded-full touch-manipulation"
               >
-                <Send className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                <Send className="h-4 w-4" />
                 <span className="sr-only">Kirim pesan</span>
               </Button>
             </div>
