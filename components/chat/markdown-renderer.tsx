@@ -21,7 +21,11 @@ const remarkPlugins = [remarkGfm]
 // ============================================
 function preprocessMarkdownForWordOutlining(raw: string): string {
   if (!raw) return ""
-  const lines = raw.split("\n")
+
+  // Pre-step: Auto-split inline sub-items (e.g. 'ke: a. ... b. ... c. ...') onto separate indented lines
+  let text = raw.replace(/([:;,\w])\s+([a-z])[.)]\s+/g, "$1\n    $2. ")
+
+  const lines = text.split("\n")
   const processed: string[] = []
 
   let inNumberedList = false
