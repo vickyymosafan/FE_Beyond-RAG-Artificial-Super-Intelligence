@@ -14,7 +14,7 @@ import * as React from "react"
 import dynamic from "next/dynamic"
 import { cn } from "@/lib/utils"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { User, Zap } from "lucide-react"
+import { User, Zap, Copy, Check } from "lucide-react"
 import Image from "next/image"
 import type { MessageItemProps } from "@/types/segregated-props"
 import { UI_STRINGS, LIMITS } from "@/lib/constants"
@@ -74,23 +74,43 @@ const DefaultAssistantContent = ({
   reasoningPath?: string[] 
   responseTimeMs?: number
 }) => {
+  const [copied, setCopied] = React.useState(false)
   const isCacheHit = reasoningPath?.some((r) => r.toLowerCase().includes(UI_STRINGS.CACHE_HIT_CHECK))
 
   const durationLabel = responseTimeMs
     ? (responseTimeMs < LIMITS.TIME_UNIT_MS ? `${responseTimeMs}ms` : `${(responseTimeMs / LIMITS.TIME_UNIT_MS).toFixed(1)}s`)
     : UI_STRINGS.DEFAULT_FAST_TIME
 
+  const handleCopy = () => {
+    navigator.clipboard.writeText(content)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
   return (
-    <div className="space-y-1.5">
-      <div className="rounded-2xl rounded-tl-sm bg-muted px-3 py-2 sm:px-4 sm:py-3">
+    <div className="space-y-1.5 group relative">
+      <div className="rounded-2xl rounded-tl-sm bg-muted px-3 py-2 sm:px-4 sm:py-3 relative">
         <MarkdownRenderer content={content} />
+        
+        {/* Superpowers One-Click Copy to Word / Clipboard Button */}
+        <button
+          onClick={handleCopy}
+          title="Salin jawaban untuk MS Word"
+          className="absolute top-2 right-2 p-1.5 rounded-lg bg-background/80 hover:bg-background border border-border text-muted-foreground hover:text-foreground opacity-0 group-hover:opacity-100 transition-opacity text-xs flex items-center gap-1 shadow-sm"
+        >
+          {copied ? <Check className="size-3.5 text-emerald-500" /> : <Copy className="size-3.5" />}
+          <span className="text-[10px] font-medium hidden sm:inline">{copied ? "Tersalin!" : "Salin ke Word"}</span>
+        </button>
       </div>
-      {isCacheHit && (
-        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-mono font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 shadow-sm animate-in fade-in slide-in-from-top-1 duration-300">
-          <Zap className="size-3 text-emerald-500 fill-emerald-500/30 animate-pulse" />
-          <span>{UI_STRINGS.CACHE_HIT_LABEL} ({durationLabel})</span>
-        </div>
-      )}
+
+      <div className="flex items-center gap-2">
+        {isCacheHit && (
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-mono font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 shadow-sm animate-in fade-in slide-in-from-top-1 duration-300">
+            <Zap className="size-3 text-emerald-500 fill-emerald-500/30 animate-pulse" />
+            <span>{UI_STRINGS.CACHE_HIT_LABEL} ({durationLabel})</span>
+          </div>
+        )}
+      </div>
     </div>
   )
 }
